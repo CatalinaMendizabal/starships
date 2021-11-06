@@ -13,7 +13,7 @@ public class ShipController {
     private ShipView shipView;
     private Ship ship;
 
-    public void forward(Double movement) {
+    public void moveForward(Double movement) {
         Vector2 movementVector = Vector2.vectorFromModule(movement, (Math.toRadians(shipView.getRotate()) - Math.PI/2));
         Vector2 from = Vector2.vector((float) shipView.getLayoutX(), (float) shipView.getLayoutY());
         Vector2 to = from.add(movementVector);

@@ -23,9 +23,7 @@ public class ShipView {
         return imageView.getLayoutY();
     }
 
-    public double getRotate() {
-        return imageView.getRotate();
-    }
+    public double getRotate() {return imageView.getRotate();}
 
     public void setRotate(double v) {
         imageView.setRotate(v);

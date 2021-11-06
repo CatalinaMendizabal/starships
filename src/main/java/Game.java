@@ -247,14 +247,23 @@ class MainTimer extends GameTimer {
         keyTracker.getKeySet().forEach(keyCode -> {
             System.out.println(keyCode.toString());
            switch (keyCode) {
-               case UP: shipController.forward(movement);
-               case DOWN: shipController.backward(movement);
-               case LEFT: shipController.rotateLeft(movement);
-               case RIGHT: shipController.rotateRight(movement);
+               case UP:
+                   shipController.moveForward(movement);
+                   break;
+               case DOWN:
+                   shipController.backward(movement);
+                   break;
+               case LEFT:
+                   shipController.rotateLeft(movement);
+                   break;
+               case RIGHT:
+                   shipController.rotateRight(movement);
+                   break;
                case SPACE: {
                    shipController.fire(bulletController);
                    List<ImageView> imageViews = bulletController.renderBullets(imageLoader);
                    pane.getChildren().addAll(imageViews);
+                   break;
                }
                default: break;
             }
