@@ -1,0 +1,13 @@
+.gradle
+.idea
+.DS_Store
+*.iml
+*.ipr
+*.iws
+*.iws.iml
+*.npmignore
+*.sublime-project
+*.sublime-workspace
+*.sublime-workspace.bak
+*.sublime-workspace.swp
+*.sublime-workspace~
