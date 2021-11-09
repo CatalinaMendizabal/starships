@@ -19,11 +19,11 @@ public class AsteroidController {
         Image image = imageLoader.loadFromResources("asteroid.png", asteroid.getHealth(), asteroid.getHealth());
 
         Random random = new Random();
-        if(random.nextBoolean()) {
+        if (random.nextBoolean()) {
             x = random.nextBoolean() ? 0 - image.getWidth() : x + image.getWidth();
             y = random.nextInt((int) y);
         } else {
-            y = random.nextBoolean() ? 0 - image.getHeight(): y + image.getHeight();
+            y = random.nextBoolean() ? 0 - image.getHeight() : y + image.getHeight();
             x = random.nextInt((int) x);
         }
 
@@ -39,37 +39,29 @@ public class AsteroidController {
             Vector2 to = from.add(movementVector);
             v.getImageView().setFitWidth(a.getHealth());
             v.getImageView().setFitHeight(a.getHealth());
-            ((Circle) (a.getShape())).setRadius(a.getHealth()/3);
+            ((Circle) (a.getShape())).setRadius(a.getHealth() / 3);
             v.move(to);
             a.move(to);
         });
     }
 
-    public List<Asteroid> getAsteroids() {
-        return new ArrayList<>(asteroids.keySet());
-       /* return asteroids.keySet().stream().toList();
-        //get asteroid list from map
-        return new ArrayList<>(asteroids.keySet());*/
-    }
+    public List<Asteroid> getAsteroids() {return new ArrayList<>(asteroids.keySet());}
 
     public List<ImageView> updateDeaths() {
         List<ImageView> deaths = new ArrayList<>();
 
-        // remove asteroids that have 0 or less health and add their imageView to the deaths list
         asteroids.forEach((a, v) -> {
-            if(a.getHealth() <= 0) {
+            if (a.getHealth() <= 0) {
                 deaths.add(v.getImageView());
                 asteroids.remove(a);
             }
         });
-
         return deaths;
     }
 
-    public void killOutOfBounds(double width, double height) {
-        // set asteroids health to 0 if asteroidView is outside the screen
+    public void deleteOutOfScreen(double width, double height) {
         asteroids.forEach((a, v) -> {
-            if(v.getLayoutX() < 0 - a.getHealth()*2 || v.getLayoutX() > width + a.getHealth()*2 || v.getLayoutY() < 0 - a.getHealth()*2 || v.getLayoutY() > height + a.getHealth()*2) {
+            if (v.getLayoutX() < 0 - a.getHealth() * 2 || v.getLayoutX() > width + a.getHealth() * 2 || v.getLayoutY() < 0 - a.getHealth() * 2 || v.getLayoutY() > height + a.getHealth() * 2) {
                 a.setHealth(0.0);
             }
         });

@@ -7,7 +7,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 import lombok.Data;
 
-@Data
 public class AsteroidView {
     ImageView imageView;
 
@@ -26,6 +25,8 @@ public class AsteroidView {
         imageView.setLayoutX(to.getX());
         imageView.setLayoutY(to.getY());
     }
+
+    public ImageView getImageView() {return imageView;}
 
     public double getLayoutX() {
         return imageView.getLayoutX();

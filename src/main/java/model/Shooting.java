@@ -1,7 +1,7 @@
-package strategy;
+package model;
 
 import controller.BulletController;
 
-public interface ShootingStrategy {
+public interface Shooting {
     void shoot(BulletController bulletController, double x, double y, double angle);
 }

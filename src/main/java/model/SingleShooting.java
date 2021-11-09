@@ -1,20 +1,25 @@
-package strategy.impl;
+package model;
 
 import controller.BulletController;
 import javafx.scene.shape.Circle;
-import model.Bullet;
-import strategy.ShootingStrategy;
 
-public class SingleShooting implements ShootingStrategy {
+public class SingleShooting implements Shooting {
 
-    private double cooldown = 500;
+    private double waitABit = 100;
     private double lastShot;
+
+    public void checkShooting(double time, Circle bullet, BulletController bulletController) {
+        if (time - lastShot > waitABit) {
+            lastShot = time;
+        }
+    }
 
     @Override
     public void shoot(BulletController bulletController, double x, double y, double angle) {
         double currentTime = System.currentTimeMillis();
-        if(currentTime - lastShot < cooldown) return;
+        if (currentTime - lastShot < waitABit) return;
         lastShot = currentTime;
+
         Circle shape = new Circle(5);
         shape.setLayoutX(x);
         shape.setLayoutY(y);

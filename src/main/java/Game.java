@@ -1,4 +1,5 @@
-import collider.MyCollider;
+import UI.IntroductionButton;
+import collider.Collider2;
 import controller.AsteroidController;
 import controller.BulletController;
 import controller.ShipController;
@@ -6,18 +7,15 @@ import edu.austral.dissis.starships.collision.CollisionEngine;
 import edu.austral.dissis.starships.file.ImageLoader;
 import edu.austral.dissis.starships.game.*;
 import factory.AsteroidFactory;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
+import javafx.beans.binding.DoubleBinding;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
-import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -26,7 +24,7 @@ import lombok.NonNull;
 import model.Asteroid;
 import model.Bullet;
 import model.Ship;
-import strategy.impl.SingleShooting;
+import model.SingleShooting;
 import view.ShipView;
 
 import java.io.IOException;
@@ -57,8 +55,7 @@ class GameManager {
     RootSetter rootSetter;
     GameContext context;
 
-    MenuBox menu;
-
+    GameState gameState;
     public GameManager(RootSetter rootSetter, GameContext gameContext) {
         this.rootSetter = rootSetter;
         this.context = gameContext;
@@ -66,23 +63,22 @@ class GameManager {
 
     boolean isIntro = true;
 
+    public static Object getInstance() {
+        return GameManager.class;
+    }
+
+    public GameState getGameState() {return gameState;}
+
+    public void setGameState(GameState gameState) {this.gameState = gameState;}
+
     Parent init() throws IOException {
         Parent parent = isIntro ? loadIntro() : loadGame();
-
-        parent.setOnMouseClicked(event -> {
-            isIntro = !isIntro;
-            try {
-                rootSetter.setRoot(init());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-
         return parent;
     }
 
     private Parent loadIntro() throws IOException {
         Pane pane = new Pane();
+        gameState = GameState.GAME_OVER;
         pane.setPrefSize(1920, 1080);
 
         ImageLoader imageLoader = new ImageLoader();
@@ -93,26 +89,43 @@ class GameManager {
 
         pane.getChildren().add(imageView);
 
-        MenuItem exit = new MenuItem("EXIT");
-        exit.setOnMouseClicked(event -> System.exit(0));
+        Text text = generateTitle();
 
-        menu = new MenuBox("STARSHIPS",
-                new MenuItem("RESUME GAME"),
-                new MenuItem("NEW GAME"),
-                exit);
+        Button start = new IntroductionButton("Start Game", 100, 150).getButton();
+        Button loaded = new IntroductionButton("Continue Game", 100, 230).getButton();
+        Button exit = new IntroductionButton("Exit Game", 100, 320).getButton();
 
-        pane.getChildren().add(menu);
+        start.setOnMouseClicked(event -> {
+            try {
+                rootSetter.setRoot(loadGame());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
 
+        exit.setOnMouseClicked(event -> {System.exit(0);});
+
+        pane.getChildren().addAll(text, start, loaded, exit);
         return pane;
+    }
+
+    private Text generateTitle() {
+        Text text = new Text("Welcome to STARSHIPS");
+        text.setFont(Font.font("Verdana", FontWeight.BOLD, 30));
+        text.setFill(Color.WHITE);
+        text.setEffect(new DropShadow(20, Color.BLACK));
+        text.setX(70);
+        text.setY(100);
+        return text;
     }
 
 
     private Parent loadGame() throws IOException {
         ImageLoader imageLoader = new ImageLoader();
+        gameState = GameState.PLAYING;
 
         Image background = imageLoader.loadFromResources("background.jpeg", 2000, 2000);
         BackgroundImage backgroundImage = new BackgroundImage(background, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, null);
-
 
         Image image = imageLoader.loadFromResources("starship.png", 100.0, 100.0);
         ShipView shipView = new ShipView(image, 200, 200);
@@ -122,89 +135,23 @@ class GameManager {
         Pane pane = new Pane(shipView.getImageView());
         pane.setBackground(new Background(backgroundImage));
 
-        new MainTimer(shipController, new AsteroidController(), new BulletController(), context.getKeyTracker(), imageLoader, pane).start();
+        MainTimer timer = new MainTimer(shipController, new AsteroidController(), new BulletController(), context.getKeyTracker(), imageLoader, pane);
+        timer.start();
+
+      /*  pane.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.P) {
+                isIntro = !isIntro;
+                try {
+                    timer.stop();
+                    rootSetter.setRoot(init());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });*/
 
         return pane;
     }
-
-    private static class MenuBox extends StackPane {
-        public MenuBox(String title, MenuItem... items) {
-            Rectangle bg = new Rectangle(300, 1080);
-            bg.setOpacity(0.2);
-
-            DropShadow shadow = new DropShadow(7, 5, 0, Color.BLACK);
-            shadow.setSpread(0.8);
-
-            bg.setEffect(shadow);
-
-            Text text = new Text(title + " ");
-            text.setFont(Font.font("Verdana", FontWeight.BOLD, 30));
-            text.setFill(Color.WHITE);
-
-            Line hSep = new Line();
-            hSep.setEndX(250);
-            hSep.setStroke(Color.DARKRED);
-            hSep.setOpacity(0.4);
-
-            Line vSep = new Line();
-            vSep.setStartX(300);
-            vSep.setEndX(300);
-            vSep.setEndY(1080);
-            vSep.setStroke(Color.DARKRED);
-            vSep.setOpacity(0.4);
-
-            VBox vBox = new VBox();
-            vBox.setAlignment(Pos.TOP_RIGHT);
-            vBox.setPadding(new Insets(60, 0, 0, 0));
-            vBox.getChildren().addAll(text, hSep);
-            vBox.getChildren().addAll(items);
-
-            setAlignment(Pos.TOP_RIGHT);
-            getChildren().addAll(bg, vSep, vBox);
-        }
-    }
-
-    private static class MenuItem extends StackPane {
-        public MenuItem(String name) {
-            Rectangle bg = new Rectangle(300, 24);
-
-            LinearGradient gradient = new LinearGradient(0, 0, 1, 0, true, CycleMethod.NO_CYCLE,
-                    new Stop(0, Color.BLACK),
-                    new Stop(0.2, Color.DARKGRAY));
-
-            bg.setFill(gradient);
-            bg.setVisible(false);
-            bg.setEffect(new DropShadow(5, 0, 5, Color.BLACK));
-
-            Text text = new Text(name + "    ");
-            text.setFill(Color.LIGHTGRAY);
-            text.setFont(Font.font(20));
-
-            setAlignment(Pos.CENTER_RIGHT);
-            getChildren().addAll(bg, text);
-
-            setOnMouseEntered(event -> {
-                bg.setVisible(true);
-                text.setFill(Color.WHITE);
-            });
-
-            setOnMouseExited(event -> {
-                bg.setVisible(false);
-                text.setFill(Color.LIGHTGRAY);
-            });
-
-            setOnMousePressed(event -> {
-                bg.setFill(Color.WHITE);
-                text.setFill(Color.BLACK);
-            });
-
-            setOnMouseReleased(event -> {
-                bg.setFill(gradient);
-                text.setFill(Color.WHITE);
-            });
-        }
-    }
-
 }
 
 class MainTimer extends GameTimer {
@@ -234,7 +181,7 @@ class MainTimer extends GameTimer {
     }
 
     private void spawnAsteroid() {
-        if(Math.random() * 100.0 < 5) {
+        if (Math.random() * 100.0 < 5) {
             Asteroid asteroid = asteroidFactory.createAsteroid();
             ImageView imageView = asteroidController.spawnAsteroid(asteroid, imageLoader, pane.getWidth(), pane.getHeight());
             pane.getChildren().add(imageView);
@@ -244,46 +191,57 @@ class MainTimer extends GameTimer {
     private void updatePosition(Double secondsSinceLastFrame) {
         double movement = 100 * secondsSinceLastFrame;
 
-        keyTracker.getKeySet().forEach(keyCode -> {
-            System.out.println(keyCode.toString());
-           switch (keyCode) {
-               case UP:
-                   shipController.moveForward(movement);
-                   break;
-               case DOWN:
-                   shipController.backward(movement);
-                   break;
-               case LEFT:
-                   shipController.rotateLeft(movement);
-                   break;
-               case RIGHT:
-                   shipController.rotateRight(movement);
-                   break;
-               case SPACE: {
-                   shipController.fire(bulletController);
-                   List<ImageView> imageViews = bulletController.renderBullets(imageLoader);
-                   pane.getChildren().addAll(imageViews);
-                   break;
-               }
-               default: break;
-            }
-
-        });
+        gameInput(movement);
 
         bulletController.updatePositions(secondsSinceLastFrame);
         asteroidController.updatePositions(secondsSinceLastFrame);
 
+        addCollisions();
+    }
+
+    private void addCollisions() {
         List<Asteroid> asteroids = asteroidController.getAsteroids();
         List<Bullet> bullets = bulletController.getBullets();
-        List<MyCollider> colliders = new ArrayList<>(asteroids);
+        List<Collider2> colliders = new ArrayList<>(asteroids);
         colliders.addAll(bullets);
         colliders.add(shipController.getShip());
         collisionEngine.checkCollisions(colliders);
     }
 
+    private void gameInput(double movement) {
+        keyTracker.getKeySet().forEach(keyCode -> {
+            switch (keyCode) {
+                case UP:
+                    shipController.moveForward(movement);
+                    break;
+                case DOWN:
+                    shipController.backward(movement);
+                    break;
+                case LEFT:
+                    shipController.rotateLeft(movement);
+                    break;
+                case RIGHT:
+                    shipController.rotateRight(movement);
+                    break;
+                case P:
+                    // pause game
+                    break;
+                case SPACE: {
+                    shipController.fire(bulletController);
+                    List<ImageView> imageViews = bulletController.renderBullets(imageLoader);
+                    pane.getChildren().addAll(imageViews);
+                    break;
+                }
+                case ESCAPE: System.exit(0);
+                default:
+                    break;
+            }
+        });
+    }
+
     private void updateDeaths() {
         pane.getChildren().remove(shipController.updateDeath());
-        asteroidController.killOutOfBounds(pane.getWidth(), pane.getHeight());
+        asteroidController.deleteOutOfScreen(pane.getWidth(), pane.getHeight());
         pane.getChildren().removeAll(asteroidController.updateDeaths());
         pane.getChildren().removeAll(bulletController.removeDeadBullets(pane.getWidth(), pane.getHeight()));
     }

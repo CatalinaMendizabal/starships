@@ -21,7 +21,7 @@ public class BulletController {
 
     @SneakyThrows
     public List<ImageView> renderBullets(ImageLoader imageLoader) {
-        Image image = imageLoader.loadFromResources("bullet.png", 20, 20);
+        Image image = imageLoader.loadFromResources("bullet2.png", 50, 50);
         List<ImageView> result = new ArrayList<>();
 
         for (int i = 0; i < bullets.size(); i++) {
@@ -65,7 +65,7 @@ public class BulletController {
                 bulletViews.remove(bulletView);
             }
 
-            if(bullet.getShape().getLayoutX() < -100 || bullet.getShape().getLayoutX() > width + 100 || bullet.getShape().getLayoutY() < -100 || bullet.getShape().getLayoutY() > height + 100) {
+            if (bullet.getShape().getLayoutX() < -100 || bullet.getShape().getLayoutX() > width + 100 || bullet.getShape().getLayoutY() < -100 || bullet.getShape().getLayoutY() > height + 100) {
                 result.add(bulletView.getImageView());
                 bullets.remove(bullet);
                 bulletViews.remove(bulletView);
