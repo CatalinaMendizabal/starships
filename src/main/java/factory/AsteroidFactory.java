@@ -1,15 +1,13 @@
 package factory;
 
 import javafx.scene.shape.Circle;
-import model.Asteroid;
+import model.entities.Asteroid;
 
 import java.util.Random;
 
 public class AsteroidFactory {
 
-    public Asteroid createAsteroid() {
-        return createAsteroid((int) (Math.random() * 100));
-    }
+    public Asteroid createAsteroid() {return createAsteroid((int) (Math.random() * 100));}
 
     public Asteroid createAsteroid(int seed) {
         Random random = new Random(seed);
