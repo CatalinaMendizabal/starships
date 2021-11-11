@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Getter;
 import model.Player;
 import model.entities.Ship;
+import model.weapon.MultipleShooting;
+import model.weapon.SingleShooting;
 import view.ShipView;
 
 import java.io.Serializable;
@@ -22,14 +24,14 @@ public class ShipController implements Serializable {
 
     public void forward(Double secondsSinceLastFrame, Pane pane) {
         double movement = secondsSinceLastFrame * ship.getSpeed();
-        Vector2 movementVector = Vector2.vectorFromModule(movement, (Math.toRadians(shipView.getRotate()) - Math.PI/2));
+        Vector2 movementVector = Vector2.vectorFromModule(movement, (Math.toRadians(shipView.getRotate()) - Math.PI / 2));
         Vector2 from = Vector2.vector((float) shipView.getLayoutX(), (float) shipView.getLayoutY());
         moveShip(pane, movementVector, from);
     }
 
     public void backward(Double secondsSinceLastFrame, Pane pane) {
         double movement = secondsSinceLastFrame * ship.getSpeed();
-        Vector2 movementVector = Vector2.vectorFromModule(-movement, (Math.toRadians(shipView.getRotate()) - Math.PI/2));
+        Vector2 movementVector = Vector2.vectorFromModule(-movement, (Math.toRadians(shipView.getRotate()) - Math.PI / 2));
         Vector2 from = Vector2.vector(shipView.getLayoutX(), shipView.getLayoutY());
         moveShip(pane, movementVector, from);
     }
@@ -47,36 +49,29 @@ public class ShipController implements Serializable {
     }
 
     public ImageView updateDeath() {
-        if(ship.getHealth() <= 0) {
+        if (ship.getHealth() <= 0) {
             shipView.getHealthView().setVisible(false);
             shipView.getPoints().setVisible(false);
             return shipView.getImageView();
-        }
-        else return null;
+        } else return null;
     }
 
-    public void fire(Player shooter) {
+    public void fire(Player shooter, boolean isNormalShooting) {
+        //if (isNormalShooting) ship.setShootingStrategy(new SingleShooting());
+        //ship.setShootingStrategy(new MultipleShooting());
         ship.fire(bulletController, shooter);
     }
 
     private void moveShip(Pane pane, Vector2 movementVector, Vector2 from) {
         Vector2 to = from.add(movementVector);
 
-        if(to.getX() > 0 && to.getX() < pane.getWidth() - 100 && to.getY() > 0 && to.getY() < pane.getHeight() - 100) {
+        if (to.getX() > 0 && to.getX() < pane.getWidth() - 100 && to.getY() > 0 && to.getY() < pane.getHeight() - 100) {
             shipView.move(to);
             ship.move(to);
         }
     }
-
     public void updateHealth() {
         shipView.updateHealth(ship.getHealth());
     }
 
-  /*  public ShipControllerDTO toDTO() {
-        return ShipControllerDTO.builder()
-                .imageName("starship.gif")
-                .ship(ship.toDTO())
-                .bulletController(bulletController.toDTO())
-                .build();
-    }*/
 }

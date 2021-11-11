@@ -15,12 +15,7 @@ public class BulletController {
     List<Bullet> bullets = new ArrayList<>();
     List<BulletView> bulletViews = new ArrayList<>();
 
-    public BulletController() {}
-
-    public BulletController(List<Bullet> bullets) {
-        this.bullets = bullets;
-        this.bulletViews = new ArrayList<>();
-        bullets.forEach(bullet -> bulletViews.add(null));
+    public BulletController() {
     }
 
     public void addBullet(Bullet bullet) {
@@ -76,7 +71,7 @@ public class BulletController {
                 bulletViews.remove(bulletView);
             }
 
-            if(bullet.getShape().getLayoutX() < -100 || bullet.getShape().getLayoutX() > width + 100 || bullet.getShape().getLayoutY() < -100 || bullet.getShape().getLayoutY() > height + 100) {
+            if (bullet.getShape().getLayoutX() < -100 || bullet.getShape().getLayoutX() > width + 100 || bullet.getShape().getLayoutY() < -100 || bullet.getShape().getLayoutY() > height + 100) {
                 result.add(bulletView.getImageView());
                 bullets.remove(bullet);
                 bulletViews.remove(bulletView);
@@ -84,10 +79,4 @@ public class BulletController {
         }
         return result;
     }
-
-/*    public BulletControllerDTO toDTO() {
-        return BulletControllerDTO.builder()
-                .bullets(bullets.stream().map(Bullet::toDTO).toList())
-                .build();
-    }*/
 }

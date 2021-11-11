@@ -34,35 +34,22 @@ public class Ship implements Collider2 {
         shape.setLayoutY(to.getY() + (100 - ((Rectangle) shape).getHeight())/2);
     }
 
-    public void heal(int amount) {
-        health += amount;
-    }
-
+    @Override
+    public void handleCollisionWith(Asteroid asteroid) {}
 
     @Override
-    public void handleCollisionWith(Asteroid asteroid) {
-
-    }
+    public void handleCollisionWith(Ship ship) {}
 
     @Override
-    public void handleCollisionWith(Ship ship) {
+    public void handleCollisionWith(Bullet bullet) {}
 
-    }
+    public Double getHealth() {return health;}
 
-    @Override
-    public void handleCollisionWith(Bullet bullet) {
+    public void setHealth(Double health) {this.health = health;}
 
-    }
+    public void setShootingStrategy(Shooting shootingStrategy) {this.shootingStrategy = shootingStrategy;}
 
+    public void setShape(Shape shape) {this.shape = shape;}
 
-   /* public ShipDTO toDTO() {
-        return ShipDTO.builder()
-                .health(health)
-                .shootingStrategy(shootingStrategy)
-                .speed(speed)
-                .posX(shape.getLayoutX())
-                .posY(shape.getLayoutY())
-                .angle(shape.getRotate())
-                .build();
-    }*/
+    public void setSpeed(double speed) {this.speed = speed;}
 }

@@ -7,13 +7,13 @@ import model.entities.Bullet;
 
 public class SingleShooting implements Shooting {
 
-    private double cooldown = 500;
+    private double waitABit = 300;
     private double lastShot;
 
     @Override
     public void shoot(Player shooter, BulletController bulletController, double x, double y, double angle) {
         double currentTime = System.currentTimeMillis();
-        if(currentTime - lastShot < cooldown) return;
+        if(currentTime - lastShot < waitABit) return;
         lastShot = currentTime;
         Circle shape = new Circle(5);
         shape.setLayoutX(x);
@@ -23,8 +23,8 @@ public class SingleShooting implements Shooting {
     }
 
     @Override
-    public void setCooldown(double cooldown) {this.cooldown = cooldown;}
+    public void setWaitABit(double waitABit) {this.waitABit = waitABit;}
 
     @Override
-    public double getCooldown() {return this.cooldown;}
+    public double getWaitABit() {return this.waitABit;}
 }

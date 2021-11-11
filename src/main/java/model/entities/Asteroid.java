@@ -11,7 +11,8 @@ import java.io.Serializable;
 
 @AllArgsConstructor
 @Data
-public class Asteroid implements Collider2, Serializable {
+public class Asteroid implements Collider2 {
+
     Double health;
     Shape shape;
     double speed;
@@ -42,15 +43,4 @@ public class Asteroid implements Collider2, Serializable {
         health = health - bullet.getDamage();
     }
 
-
-/*    public AsteroidDTO toDTO() {
-        return AsteroidDTO.builder()
-                .health(health)
-                .centerX(((Circle) shape).getCenterX())
-                .centerY(((Circle) shape).getCenterY())
-                .rotate(shape.getRotate())
-                .radius(((Circle) shape).getRadius())
-                .speed(speed)
-                .build();
-    }*/
 }

@@ -26,6 +26,9 @@ public class Player implements Serializable {
     KeyCode keyBackward;
     KeyCode keyRotateRight;
     KeyCode keyShoot;
+    KeyCode changeShootingMode;
+
+    boolean isNormalShooting;
 
     public void updateInput(Pane pane, KeyTracker keyTracker, double secondsSinceLastFrame) {
         keyTracker.getKeySet().forEach(keyCode -> {
@@ -34,10 +37,11 @@ public class Player implements Serializable {
             else if (keyCode == keyRotateLeft) shipController.rotateLeft(secondsSinceLastFrame);
             else if (keyCode == keyRotateRight) shipController.rotateRight(secondsSinceLastFrame);
             else if (keyCode == keyShoot) {
-                shipController.fire(this);
+                shipController.fire(this, isNormalShooting);
                 List<ImageView> imageViews = shipController.getBulletController().renderBullets();
                 pane.getChildren().addAll(imageViews);
             }
+            else if (keyCode == changeShootingMode) isNormalShooting = !isNormalShooting;
         });
     }
 
@@ -48,17 +52,4 @@ public class Player implements Serializable {
 
     public void updatePoints() {shipController.getShipView().updatePoints(score);}
 
-   /* public PlayerDTO toDTO() {
-        return PlayerDTO.builder()
-                .id(id)
-                .score(score)
-                .lives(lives)
-                .shipController(shipController.toDTO())
-                .keyForward(keyForward)
-                .keyRotateLeft(keyRotateLeft)
-                .keyBackward(keyBackward)
-                .keyRotateRight(keyRotateRight)
-                .keyShoot(keyShoot)
-                .build();
-    }*/
 }

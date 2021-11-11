@@ -7,9 +7,8 @@ public interface Shooting {
 
     void shoot(Player shooter, BulletController bulletController, double x, double y, double angle);
 
-    void setCooldown(double cooldown);
+    void setWaitABit(double waitABit);
 
-    double getCooldown();
+    double getWaitABit();
 }
 
-// using strategy pattern

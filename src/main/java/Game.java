@@ -21,6 +21,7 @@ import lombok.Setter;
 import model.Player;
 import model.entities.Asteroid;
 import utils.Config;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +50,7 @@ class GameManager {
 
     RootSetter rootSetter;
     GameContext context;
-    GameTimer gameTimer;
+
     MainTimer mainTimer;
 
     public GameManager(RootSetter rootSetter, GameContext gameContext) {
@@ -89,11 +90,21 @@ class GameManager {
             }
         });
 
+        loaded.setOnMouseClicked(event -> {
+            try {
+                rootSetter.setRoot(loadGame());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+
         exit.setOnMouseClicked(event -> {
             System.exit(0);
         });
 
         pane.getChildren().addAll(text, start, loaded, exit);
+
         return pane;
     }
 
@@ -126,7 +137,8 @@ class GameManager {
                     Config.PLAYER_KEYS[i][1],
                     Config.PLAYER_KEYS[i][2],
                     Config.PLAYER_KEYS[i][3],
-                    Config.PLAYER_KEYS[i][4]);
+                    Config.PLAYER_KEYS[i][4],
+                    Config.PLAYER_KEYS[i][5], true);
 
             pane.getChildren().add(players[i].getShipController().getShipView().getImageView());
             pane.getChildren().add(players[i].getShipController().getShipView().getHealthView());
@@ -134,13 +146,9 @@ class GameManager {
         }
 
         AsteroidController asteroidController = new AsteroidController();
-       // PickupController pickupController = new PickupController();
-        if (mainTimer == null) mainTimer = new MainTimer(players, context.getKeyTracker(), imageLoader, pane, asteroidController);
-        mainTimer.setPlayers(players);
-        mainTimer.setKeyTracker(context.getKeyTracker());
-        mainTimer.setImageLoader(imageLoader);
-        mainTimer.setPane(pane);
-        mainTimer.setAsteroidController(asteroidController);
+        if (mainTimer == null)
+            mainTimer = new MainTimer(players, context.getKeyTracker(), imageLoader, pane, asteroidController);
+        setMainTimer(imageLoader, pane, players, asteroidController);
 
         pane.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.P) {
@@ -153,10 +161,23 @@ class GameManager {
                     e.printStackTrace();
                 }
             }
-
         });
+
+        pane.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) System.exit(0);
+        });
+
         mainTimer.start();
+
         return pane;
+    }
+
+    private void setMainTimer(ImageLoader imageLoader, Pane pane, Player[] players, AsteroidController asteroidController) {
+        mainTimer.setPlayers(players);
+        mainTimer.setKeyTracker(context.getKeyTracker());
+        mainTimer.setImageLoader(imageLoader);
+        mainTimer.setPane(pane);
+        mainTimer.setAsteroidController(asteroidController);
     }
 }
 
@@ -183,7 +204,7 @@ class MainTimer extends GameTimer {
 
     @Override
     public void nextFrame(double secondsSinceLastFrame) {
-        if(paused) {
+        if (paused) {
             secondsSinceLastFrame = 0;
             paused = false;
         }
@@ -201,7 +222,7 @@ class MainTimer extends GameTimer {
     }
 
     private void spawnAsteroid() {
-        if(Math.random() * 100.0 < 5) {
+        if (Math.random() * 100.0 < 5) {
             Asteroid asteroid = asteroidFactory.createAsteroid();
             ImageView imageView = asteroidController.spawnAsteroid(asteroid, imageLoader, pane.getWidth(), pane.getHeight());
             pane.getChildren().add(imageView);
@@ -210,7 +231,7 @@ class MainTimer extends GameTimer {
 
     private void updatePosition(Double secondsSinceLastFrame) {
 
-        for(Player player : players) {
+        for (Player player : players) {
             player.updateInput(pane, keyTracker, secondsSinceLastFrame);
             player.getShipController().getBulletController().updatePositions(secondsSinceLastFrame);
         }
@@ -227,7 +248,7 @@ class MainTimer extends GameTimer {
     }
 
     private void updateDeaths() {
-        for(Player player : players) {
+        for (Player player : players) {
             pane.getChildren().remove(player.getShipController().updateDeath());
             pane.getChildren().removeAll(player.getShipController().getBulletController().removeDeadBullets(pane.getWidth(), pane.getHeight()));
         }
