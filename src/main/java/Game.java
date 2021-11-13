@@ -21,6 +21,7 @@ import lombok.Setter;
 import model.Player;
 import model.entities.Asteroid;
 import utils.Config;
+import utils.GameState;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -62,8 +63,7 @@ class GameManager {
 
     Parent init() throws IOException {
         Parent parent = isIntro ? loadIntro() : loadGame();
-        return parent;
-    }
+        return parent;    }
 
     private Parent loadIntro() throws IOException {
         Pane pane = new Pane();
@@ -92,12 +92,14 @@ class GameManager {
 
         loaded.setOnMouseClicked(event -> {
             try {
+                /*if (gameState == null) {
+                    rootSetter.setRoot(init());
+                }*/
                 rootSetter.setRoot(loadGame());
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
-
 
         exit.setOnMouseClicked(event -> {
             System.exit(0);
@@ -129,7 +131,7 @@ class GameManager {
         Pane pane = new Pane();
         pane.setBackground(new Background(backgroundImage));
 
-        Player[] players = new Player[Config.PLAYERS];
+       /* Player[] players = new Player[Config.PLAYERS];
         for (int i = 0; i < Config.PLAYERS; i++) {
 
             players[i] = new Player(i, 0, Config.LIVES, Objects.requireNonNull(Config.getPlayerShips())[i],
@@ -149,6 +151,34 @@ class GameManager {
         if (mainTimer == null)
             mainTimer = new MainTimer(players, context.getKeyTracker(), imageLoader, pane, asteroidController);
         setMainTimer(imageLoader, pane, players, asteroidController);
+*/
+        Player[] players = new Player[Config.PLAYERS];
+        for (int i = 0; i < Config.PLAYERS; i++) {
+
+            players[i] = new Player(i, 0, Config.LIVES, Objects.requireNonNull(Config.getPlayerShips())[i],
+                    Config.PLAYER_KEYS[i][0],
+                    Config.PLAYER_KEYS[i][1],
+                    Config.PLAYER_KEYS[i][2],
+                    Config.PLAYER_KEYS[i][3],
+                    Config.PLAYER_KEYS[i][4],
+                    Config.PLAYER_KEYS[i][5], true
+            );
+
+            pane.getChildren().add(players[i].getShipController().getShipView().getImageView());
+            pane.getChildren().add(players[i].getShipController().getShipView().getHealthView());
+            pane.getChildren().add(players[i].getShipController().getShipView().getPoints());
+        }
+
+
+        AsteroidController asteroidController = new AsteroidController();
+        // PickupController pickupController = new PickupController();
+        if (mainTimer == null) mainTimer = new MainTimer(players, context.getKeyTracker(), imageLoader, pane, asteroidController);
+        mainTimer.setPlayers(players);
+        mainTimer.setKeyTracker(context.getKeyTracker());
+        mainTimer.setImageLoader(imageLoader);
+        mainTimer.setPane(pane);
+        mainTimer.setAsteroidController(asteroidController);
+
 
         pane.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.P) {
@@ -160,99 +190,111 @@ class GameManager {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            } else if (event.getCode() == KeyCode.ESCAPE) System.exit(0);
+
+
+        });
+       /* pane.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.P) {
+                isIntro = !isIntro;
+                try {
+                    mainTimer.stop();
+                    mainTimer.setPaused(true);
+                    rootSetter.setRoot(loadIntro(new GameState(List.of(players), asteroidController.getAsteroids())));
+                   // rootSetter.setRoot(loadIntro());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-        });
+        });*/
 
-        pane.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ESCAPE) System.exit(0);
-        });
+            mainTimer.start();
 
-        mainTimer.start();
-
-        return pane;
-    }
-
-    private void setMainTimer(ImageLoader imageLoader, Pane pane, Player[] players, AsteroidController asteroidController) {
-        mainTimer.setPlayers(players);
-        mainTimer.setKeyTracker(context.getKeyTracker());
-        mainTimer.setImageLoader(imageLoader);
-        mainTimer.setPane(pane);
-        mainTimer.setAsteroidController(asteroidController);
-    }
-}
-
-@Setter
-class MainTimer extends GameTimer {
-    Player[] players;
-    AsteroidController asteroidController;
-    KeyTracker keyTracker;
-    ImageLoader imageLoader;
-    Pane pane;
-    AsteroidFactory asteroidFactory = new AsteroidFactory();
-    CollisionEngine collisionEngine = new CollisionEngine();
-
-    boolean paused = false;
-
-
-    public MainTimer(Player[] players, KeyTracker keyTracker, ImageLoader imageLoader, Pane pane, AsteroidController asteroidController) {
-        this.players = players;
-        this.keyTracker = keyTracker;
-        this.imageLoader = imageLoader;
-        this.pane = pane;
-        this.asteroidController = asteroidController;
-    }
-
-    @Override
-    public void nextFrame(double secondsSinceLastFrame) {
-        if (paused) {
-            secondsSinceLastFrame = 0;
-            paused = false;
+            return pane;
         }
-        pane.requestFocus();
-        updatePosition(secondsSinceLastFrame);
-        updateHealths();
-        updateDeaths();
-        spawnAsteroid();
-    }
 
-    private void updateHealths() {
-        for (Player player : players) {
-            player.getShipController().updateHealth();
+        private void setMainTimer (ImageLoader imageLoader, Pane pane, Player[]players, AsteroidController
+        asteroidController){
+            mainTimer.setPlayers(players);
+            mainTimer.setKeyTracker(context.getKeyTracker());
+            mainTimer.setImageLoader(imageLoader);
+            mainTimer.setPane(pane);
+            mainTimer.setAsteroidController(asteroidController);
         }
     }
 
-    private void spawnAsteroid() {
-        if (Math.random() * 100.0 < 5) {
-            Asteroid asteroid = asteroidFactory.createAsteroid();
-            ImageView imageView = asteroidController.spawnAsteroid(asteroid, imageLoader, pane.getWidth(), pane.getHeight());
-            pane.getChildren().add(imageView);
+    @Setter
+    class MainTimer extends GameTimer {
+        Player[] players;
+        AsteroidController asteroidController;
+        KeyTracker keyTracker;
+        ImageLoader imageLoader;
+        Pane pane;
+        AsteroidFactory asteroidFactory = new AsteroidFactory();
+        CollisionEngine collisionEngine = new CollisionEngine();
+
+        boolean paused = false;
+
+
+        public MainTimer(Player[] players, KeyTracker keyTracker, ImageLoader imageLoader, Pane pane, AsteroidController asteroidController) {
+            this.players = players;
+            this.keyTracker = keyTracker;
+            this.imageLoader = imageLoader;
+            this.pane = pane;
+            this.asteroidController = asteroidController;
+        }
+
+        @Override
+        public void nextFrame(double secondsSinceLastFrame) {
+            if (paused) {
+                secondsSinceLastFrame = 0;
+                paused = false;
+            }
+            pane.requestFocus();
+            updatePosition(secondsSinceLastFrame);
+            updateHealths();
+            updateDeaths();
+            spawnAsteroid();
+        }
+
+        private void updateHealths() {
+            for (Player player : players) {
+                player.getShipController().updateHealth();
+            }
+        }
+
+        private void spawnAsteroid() {
+            if (Math.random() * 100.0 < 5) {
+                Asteroid asteroid = asteroidFactory.createAsteroid();
+                ImageView imageView = asteroidController.spawnAsteroid(asteroid, imageLoader, pane.getWidth(), pane.getHeight());
+                pane.getChildren().add(imageView);
+            }
+        }
+
+        private void updatePosition(Double secondsSinceLastFrame) {
+
+            for (Player player : players) {
+                player.updateInput(pane, keyTracker, secondsSinceLastFrame);
+                player.getShipController().getBulletController().updatePositions(secondsSinceLastFrame);
+            }
+
+            asteroidController.updatePositions(secondsSinceLastFrame);
+
+            List<Collider2> colliders = new ArrayList<>();
+            colliders.addAll(asteroidController.getAsteroids());
+            for (Player player : players) {
+                colliders.add(player.getShipController().getShip());
+                colliders.addAll(player.getShipController().getBulletController().getBullets());
+            }
+            collisionEngine.checkCollisions(colliders);
+        }
+
+        private void updateDeaths() {
+            for (Player player : players) {
+                pane.getChildren().remove(player.getShipController().updateDeath());
+                pane.getChildren().removeAll(player.getShipController().getBulletController().removeDeadBullets(pane.getWidth(), pane.getHeight()));
+            }
+            asteroidController.killOutOfBounds(pane.getWidth(), pane.getHeight());
+            pane.getChildren().removeAll(asteroidController.updateDeaths());
         }
     }
-
-    private void updatePosition(Double secondsSinceLastFrame) {
-
-        for (Player player : players) {
-            player.updateInput(pane, keyTracker, secondsSinceLastFrame);
-            player.getShipController().getBulletController().updatePositions(secondsSinceLastFrame);
-        }
-
-        asteroidController.updatePositions(secondsSinceLastFrame);
-
-        List<Collider2> colliders = new ArrayList<>();
-        colliders.addAll(asteroidController.getAsteroids());
-        for (Player player : players) {
-            colliders.add(player.getShipController().getShip());
-            colliders.addAll(player.getShipController().getBulletController().getBullets());
-        }
-        collisionEngine.checkCollisions(colliders);
-    }
-
-    private void updateDeaths() {
-        for (Player player : players) {
-            pane.getChildren().remove(player.getShipController().updateDeath());
-            pane.getChildren().removeAll(player.getShipController().getBulletController().removeDeadBullets(pane.getWidth(), pane.getHeight()));
-        }
-        asteroidController.killOutOfBounds(pane.getWidth(), pane.getHeight());
-        pane.getChildren().removeAll(asteroidController.updateDeaths());
-    }
-}

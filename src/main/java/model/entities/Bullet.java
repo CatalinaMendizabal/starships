@@ -5,6 +5,7 @@ import edu.austral.dissis.starships.vector.Vector2;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 import lombok.Data;
+import model.BulletDTO;
 import model.Player;
 import model.entities.Asteroid;
 
@@ -37,23 +38,18 @@ public class Bullet implements Collider2 {
     @Override
     public void handleCollisionWith(Asteroid asteroid) {
         speed = 0;
-        if(asteroid.getHealth() < 0) shooter.addPoints(damage);
+        if (asteroid.getHealth() < 0) shooter.addPoints(damage);
         shooter.addPoints(damage);
     }
 
     @Override
-    public void handleCollisionWith(Ship ship) {
-
-    }
+    public void handleCollisionWith(Ship ship) {}
 
     @Override
-    public void handleCollisionWith(Bullet bullet) {
-
-    }
+    public void handleCollisionWith(Bullet bullet) {}
 
 
-
-/*    public BulletDTO toDTO() {
+    public BulletDTO toDTO() {
         return BulletDTO.builder()
                 .speed(speed)
                 .damage(damage)
@@ -62,5 +58,5 @@ public class Bullet implements Collider2 {
                 .rotate(shape.getRotate())
                 .radius(((Circle) shape).getRadius())
                 .build();
-    }*/
+    }
 }

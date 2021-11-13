@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import model.Player;
+import model.ShipDTO;
 import model.weapon.Shooting;
 
 @AllArgsConstructor
@@ -40,8 +41,8 @@ public class Ship implements Collider2 {
     @Override
     public void handleCollisionWith(Ship ship) {}
 
-    @Override
-    public void handleCollisionWith(Bullet bullet) {}
+   /* @Override
+    public void handleCollisionWith(Bullet bullet) {}*/
 
     public Double getHealth() {return health;}
 
@@ -52,4 +53,26 @@ public class Ship implements Collider2 {
     public void setShape(Shape shape) {this.shape = shape;}
 
     public void setSpeed(double speed) {this.speed = speed;}
+
+       @Override
+    public void handleCollisionWith(Bullet bullet) {
+        if(bullet.getShooter().getShipController().getShip() != this) {
+            health -= bullet.getDamage() / 10;
+
+            bullet.setSpeed(0);
+            if(health < 0) bullet.getShooter().addPoints(bullet.getDamage());
+            bullet.getShooter().addPoints(bullet.getDamage()/10);
+        }
+    }
+
+    public ShipDTO toDTO() {
+        return ShipDTO.builder()
+                .health(health)
+                .shootingStrategy(shootingStrategy)
+                .speed(speed)
+                .posX(shape.getLayoutX())
+                .posY(shape.getLayoutY())
+                .angle(shape.getRotate())
+                .build();
+    }
 }

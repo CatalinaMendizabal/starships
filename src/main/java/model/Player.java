@@ -32,8 +32,8 @@ public class Player implements Serializable {
 
     public void updateInput(Pane pane, KeyTracker keyTracker, double secondsSinceLastFrame) {
         keyTracker.getKeySet().forEach(keyCode -> {
-            if (keyCode == keyForward) shipController.forward(secondsSinceLastFrame, pane);
-            else if (keyCode == keyBackward) shipController.backward(secondsSinceLastFrame, pane);
+            if (keyCode == keyForward) shipController.moveForward(secondsSinceLastFrame, pane);
+            else if (keyCode == keyBackward) shipController.moveBackward(secondsSinceLastFrame, pane);
             else if (keyCode == keyRotateLeft) shipController.rotateLeft(secondsSinceLastFrame);
             else if (keyCode == keyRotateRight) shipController.rotateRight(secondsSinceLastFrame);
             else if (keyCode == keyShoot) {
@@ -51,5 +51,19 @@ public class Player implements Serializable {
     }
 
     public void updatePoints() {shipController.getShipView().updatePoints(score);}
+
+      public PlayerDTO toDTO() {
+        return PlayerDTO.builder()
+                .id(id)
+                .score(score)
+                .lives(lives)
+                .shipController(shipController.toDTO())
+                .keyForward(keyForward)
+                .keyRotateLeft(keyRotateLeft)
+                .keyBackward(keyBackward)
+                .keyRotateRight(keyRotateRight)
+                .keyShoot(keyShoot)
+                .build();
+    }
 
 }

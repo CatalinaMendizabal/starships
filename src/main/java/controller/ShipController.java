@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import model.Player;
+import model.ShipControllerDTO;
 import model.entities.Ship;
 import model.weapon.MultipleShooting;
 import model.weapon.SingleShooting;
@@ -22,14 +23,14 @@ public class ShipController implements Serializable {
     private Ship ship;
     private BulletController bulletController;
 
-    public void forward(Double secondsSinceLastFrame, Pane pane) {
+    public void moveForward(Double secondsSinceLastFrame, Pane pane) {
         double movement = secondsSinceLastFrame * ship.getSpeed();
         Vector2 movementVector = Vector2.vectorFromModule(movement, (Math.toRadians(shipView.getRotate()) - Math.PI / 2));
         Vector2 from = Vector2.vector((float) shipView.getLayoutX(), (float) shipView.getLayoutY());
         moveShip(pane, movementVector, from);
     }
 
-    public void backward(Double secondsSinceLastFrame, Pane pane) {
+    public void moveBackward(Double secondsSinceLastFrame, Pane pane) {
         double movement = secondsSinceLastFrame * ship.getSpeed();
         Vector2 movementVector = Vector2.vectorFromModule(-movement, (Math.toRadians(shipView.getRotate()) - Math.PI / 2));
         Vector2 from = Vector2.vector(shipView.getLayoutX(), shipView.getLayoutY());
@@ -74,4 +75,11 @@ public class ShipController implements Serializable {
         shipView.updateHealth(ship.getHealth());
     }
 
+      public ShipControllerDTO toDTO() {
+        return ShipControllerDTO.builder()
+                .imageName("starship.gif")
+                .ship(ship.toDTO())
+                .bulletController(bulletController.toDTO())
+                .build();
+    }
 }

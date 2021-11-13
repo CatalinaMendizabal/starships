@@ -5,17 +5,24 @@ import edu.austral.dissis.starships.vector.Vector2;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import lombok.SneakyThrows;
+import model.BulletControllerDTO;
 import model.entities.Bullet;
 import view.BulletView;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class BulletController {
     List<Bullet> bullets = new ArrayList<>();
     List<BulletView> bulletViews = new ArrayList<>();
 
-    public BulletController() {
+    public BulletController() {}
+
+    public BulletController(List<Bullet> bullets) {
+        this.bullets = bullets;
+        this.bulletViews = new ArrayList<>();
+        bullets.forEach(bullet -> bulletViews.add(null));
     }
 
     public void addBullet(Bullet bullet) {
@@ -79,4 +86,12 @@ public class BulletController {
         }
         return result;
     }
+
+      public BulletControllerDTO toDTO() {
+        return BulletControllerDTO.builder()
+                .bullets(bullets.stream().map(Bullet::toDTO).collect(Collectors.toList()))
+                .build();
+    }
+          /*.bullets(bullets.stream().map(Bullet::toDTO).toList())
+                .build();*/
 }
