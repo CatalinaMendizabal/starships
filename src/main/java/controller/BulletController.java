@@ -92,6 +92,5 @@ public class BulletController {
                 .bullets(bullets.stream().map(Bullet::toDTO).collect(Collectors.toList()))
                 .build();
     }
-          /*.bullets(bullets.stream().map(Bullet::toDTO).toList())
-                .build();*/
+
 }

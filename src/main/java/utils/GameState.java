@@ -17,13 +17,11 @@ public class GameState implements Serializable {
     private final List<PlayerDTO> players;
     private final List<AsteroidDTO> asteroids;
 
-    public GameState(List<Player> players, List<Asteroid> asteroids) {
-       // this.players = players.stream().map(Player::toDTO).toList();
+    public GameState(Player[] players, List<Asteroid> asteroids) {
         this.players = new ArrayList<>();
         for (Player player : players) {
             this.players.add(player.toDTO());
         }
-        // this.asteroids = asteroids.stream().map(Asteroid::toDTO).toList();
         this.asteroids = new ArrayList<>();
         for (Asteroid asteroid : asteroids) {
             this.asteroids.add(asteroid.toDTO());

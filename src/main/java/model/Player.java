@@ -11,7 +11,6 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.List;
-
 @Data
 @AllArgsConstructor
 @Builder
@@ -50,9 +49,11 @@ public class Player implements Serializable {
         updatePoints();
     }
 
-    public void updatePoints() {shipController.getShipView().updatePoints(score);}
+    public void updatePoints() {
+        shipController.getShipView().updatePoints(score);
+    }
 
-      public PlayerDTO toDTO() {
+    public PlayerDTO toDTO() {
         return PlayerDTO.builder()
                 .id(id)
                 .score(score)
@@ -65,5 +66,4 @@ public class Player implements Serializable {
                 .keyShoot(keyShoot)
                 .build();
     }
-
 }

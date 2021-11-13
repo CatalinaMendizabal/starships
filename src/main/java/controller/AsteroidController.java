@@ -10,6 +10,7 @@ import model.entities.Asteroid;
 import view.AsteroidView;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class AsteroidController {
     List<Asteroid> asteroids = new ArrayList<>();
@@ -95,10 +96,6 @@ public class AsteroidController {
     }
 
     public List<ImageView> getViews() {
-        List<ImageView> views = new ArrayList<>();
-        for (AsteroidView v : asteroidViews) {
-            views.add(v.getImageView());
-        }
-        return views;
+        return asteroidViews.stream().map(AsteroidView::getImageView).collect(Collectors.toList());
     }
 }
