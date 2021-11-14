@@ -20,6 +20,7 @@ public class Config {
             {KeyCode.W, KeyCode.A, KeyCode.S, KeyCode.D, KeyCode.SPACE, KeyCode.Q},
             {KeyCode.UP, KeyCode.LEFT, KeyCode.DOWN, KeyCode.RIGHT, KeyCode.SHIFT, KeyCode.ENTER}
     };
+
     public static ShipController[] PLAYER_SHIPS;
 
     static {

@@ -1,4 +1,6 @@
+import UI.IntroGameUI;
 import UI.IntroductionButton;
+import UI.LoadGameUI;
 import collider.Collider2;
 import controller.AsteroidController;
 import edu.austral.dissis.starships.collision.CollisionEngine;
@@ -25,9 +27,10 @@ import model.components.Asteroid;
 import utils.Config;
 import model.serializer.GameSerializer;
 import model.serializer.GameState;
+import utils.PlayerManagement;
+import utils.SpawnAsteroids;
+
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -72,20 +75,9 @@ class GameManager {
         Pane pane = new Pane();
         pane.setPrefSize(1920, 1080);
 
-        ImageLoader imageLoader = new ImageLoader();
-        Image background = imageLoader.loadFromResources("background.jpeg", 2000, 2000);
-        ImageView imageView = new ImageView(background);
-        imageView.setFitWidth(1920);
-        imageView.setFitHeight(1080);
+        IntroGameUI introGameUI = new IntroGameUI();
 
-        pane.getChildren().add(imageView);
-
-        Text text = generateTitle();
-        Button start = new IntroductionButton("Start Game", 100, 150).getButton();
-        Button loaded = new IntroductionButton("Continue Game", 100, 230).getButton();
-        Button exit = new IntroductionButton("Exit Game", 100, 320).getButton();
-
-        start.setOnMouseClicked(event -> {
+        introGameUI.getStart().setOnMouseClicked(event -> {
             try {
                 rootSetter.setRoot(loadGame(null));
             } catch (IOException e) {
@@ -93,7 +85,7 @@ class GameManager {
             }
         });
 
-        loaded.setOnMouseClicked(event -> {
+        introGameUI.getLoaded().setOnMouseClicked(event -> {
             GameSerializer.saveGame(gameState);
             try {
                 if (gameState == null) {
@@ -105,24 +97,15 @@ class GameManager {
             }
         });
 
-        exit.setOnMouseClicked(event -> {
+        introGameUI.getExit().setOnMouseClicked(event -> {
             System.exit(0);
         });
 
-        pane.getChildren().addAll(text, start, loaded, exit);
-
+        introGameUI.generateIntro(pane);
         return pane;
     }
 
-    private Text generateTitle() {
-        Text text = new Text("Welcome to STARSHIPS");
-        text.setFont(Font.font("Verdana", FontWeight.BOLD, 30));
-        text.setFill(Color.WHITE);
-        text.setEffect(new DropShadow(20, Color.BLACK));
-        text.setX(70);
-        text.setY(100);
-        return text;
-    }
+
 
     private Parent endGame(GameState gameState) throws IOException {
         Pane pane = new Pane();
@@ -144,13 +127,10 @@ class GameManager {
 
     private Parent loadGame(GameState gameState) throws IOException {
 
-        ImageLoader imageLoader = new ImageLoader();
-
-        Image background = imageLoader.loadFromResources("background.jpeg", 2000, 2000);
-        BackgroundImage backgroundImage = new BackgroundImage(background, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, null);
-
         Pane pane = new Pane();
-        pane.setBackground(new Background(backgroundImage));
+        LoadGameUI loadGameUI = new LoadGameUI();
+        loadGameUI.generateGameUI(pane);
+
         Player [] players;
         AsteroidController asteroidController;
 
@@ -165,7 +145,7 @@ class GameManager {
             pane.getChildren().addAll(asteroidController.getViews());
         }
 
-        setTimerConfiguration(imageLoader, pane, players, asteroidController);
+        setTimerConfiguration(loadGameUI.getImageLoader(), pane, players, asteroidController);
 
 
         pane.setOnKeyPressed(event -> {
@@ -231,6 +211,8 @@ class MainTimer extends GameTimer {
     Pane pane;
     AsteroidFactory asteroidFactory = new AsteroidFactory();
     CollisionEngine collisionEngine = new CollisionEngine();
+    SpawnAsteroids spawnAsteroids = new SpawnAsteroids();
+    PlayerManagement playerManagement = new PlayerManagement();
 
     boolean paused = false;
 
@@ -249,49 +231,10 @@ class MainTimer extends GameTimer {
             paused = false;
         }
         pane.requestFocus();
-        updatePosition(secondsSinceLastFrame);
-        updateHealths();
-        updateDeaths();
-        spawnAsteroid();
+        playerManagement.updatePosition(secondsSinceLastFrame, players, pane, keyTracker, collisionEngine, asteroidController);
+        playerManagement.updateHealths(players);
+        playerManagement.updateDeaths(players, pane, asteroidController);
+        spawnAsteroids.spawnAsteroid(asteroidFactory, asteroidController, imageLoader, pane);
     }
 
-    private void updateHealths() {
-        for (Player player : players) {
-            if (player.getShipController().getShip().getHealth() > 0) player.getShipController().updateHealth();
-        }
-    }
-
-    private void spawnAsteroid() {
-        if (Math.random() * 100.0 < 5) {
-            Asteroid asteroid = asteroidFactory.createAsteroid();
-            ImageView imageView = asteroidController.spawnAsteroid(asteroid, imageLoader, pane.getWidth(), pane.getHeight());
-            pane.getChildren().add(imageView);
-        }
-    }
-
-    private void updatePosition(Double secondsSinceLastFrame) {
-
-        for (Player player : players) {
-            player.updateInput(pane, keyTracker, secondsSinceLastFrame);
-            player.getShipController().getBulletController().updatePositions(secondsSinceLastFrame);
-        }
-
-        asteroidController.updatePositions(secondsSinceLastFrame);
-
-        List<Collider2> colliders = new ArrayList<>(asteroidController.getAsteroids());
-        for (Player player : players) {
-            colliders.add(player.getShipController().getShip());
-            colliders.addAll(player.getShipController().getBulletController().getBullets());
-        }
-        collisionEngine.checkCollisions(colliders);
-    }
-
-    private void updateDeaths() {
-        for (Player player : players) {
-            pane.getChildren().remove(player.getShipController().updateDeath());
-            pane.getChildren().removeAll(player.getShipController().getBulletController().removeDeadBullets(pane.getWidth(), pane.getHeight()));
-        }
-        asteroidController.killOutOfBounds(pane.getWidth(), pane.getHeight());
-        pane.getChildren().removeAll(asteroidController.updateDeaths());
-    }
 }
