@@ -21,6 +21,9 @@ public class PlayerDTO implements Serializable {
     private KeyCode keyBackward;
     private KeyCode keyRotateRight;
     private KeyCode keyShoot;
+    private KeyCode changeShootingMode;
+
+    private boolean isNormalShooting;
 
     public Player toPlayer() {
         ShipController shipController = this.shipController.toShipController();
@@ -36,6 +39,8 @@ public class PlayerDTO implements Serializable {
                 .keyBackward(keyBackward)
                 .keyRotateRight(keyRotateRight)
                 .keyShoot(keyShoot)
+                .changeShootingMode(changeShootingMode)
+                .isNormalShooting(isNormalShooting)
                 .build();
 
         shipController.getBulletController().getBullets().forEach(bullet -> bullet.setShooter(player));

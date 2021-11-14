@@ -27,6 +27,7 @@ import model.components.Asteroid;
 import utils.Config;
 import model.serializer.GameSerializer;
 import model.serializer.GameState;
+import utils.KeyConfiguration;
 import utils.PlayerManagement;
 import utils.SpawnAsteroids;
 
@@ -105,26 +106,6 @@ class GameManager {
         return pane;
     }
 
-
-
-    private Parent endGame(GameState gameState) throws IOException {
-        Pane pane = new Pane();
-        Text text = new Text("Game over!");
-        text.setFont(Font.font("Verdana", FontWeight.BOLD, 40));
-        text.setFill(Color.DARKRED);
-        text.setEffect(new DropShadow(20, Color.BLACK));
-        text.setX(70);
-        text.setY(100);
-
-        Text player = new Text("Player: 1 won :)");
-        player.setX(70);
-        player.setY(150);
-
-        pane.getChildren().addAll(text, player);
-
-        return pane;
-    }
-
     private Parent loadGame(GameState gameState) throws IOException {
 
         Pane pane = new Pane();
@@ -133,14 +114,15 @@ class GameManager {
 
         Player [] players;
         AsteroidController asteroidController;
+        KeyConfiguration keyConfiguration = new KeyConfiguration();
 
         if (gameState == null) {
             players = new Player[Config.PLAYERS];
-            configGamePlayers(pane, players);
+            keyConfiguration.configKeys(players, pane);
             asteroidController = new AsteroidController();
         } else {
             players = gameState.getPlayers().stream().map(PlayerDTO::toPlayer).toArray(Player[]::new);
-            configGameSavePlayers(pane, players);
+            keyConfiguration.configSaveGameKeys(players, pane);
             asteroidController = new AsteroidController(gameState.getAsteroids().stream().map(AsteroidDTO::toAsteroid).collect(Collectors.toList()));
             pane.getChildren().addAll(asteroidController.getViews());
         }
@@ -166,31 +148,6 @@ class GameManager {
         return pane;
     }
 
-    private void configGameSavePlayers(Pane pane, Player[] players) {
-        for (Player player : players) {
-            pane.getChildren().add(player.getShipController().getShipView().getImageView());
-            pane.getChildren().add(player.getShipController().getShipView().getHealthView());
-            pane.getChildren().add(player.getShipController().getShipView().getScore());
-            pane.getChildren().addAll(player.getShipController().getBulletController().renderBullets());
-        }
-    }
-
-    private void configGamePlayers(Pane pane, Player[] players) {
-        for (int i = 0; i < Config.PLAYERS; i++) {
-            players[i] = new Player(i, 0, Config.LIVES, Objects.requireNonNull(Config.getPlayerShips())[i],
-                    Config.PLAYER_KEYS[i][0],
-                    Config.PLAYER_KEYS[i][1],
-                    Config.PLAYER_KEYS[i][2],
-                    Config.PLAYER_KEYS[i][3],
-                    Config.PLAYER_KEYS[i][4],
-                    Config.PLAYER_KEYS[i][5], true);
-
-            pane.getChildren().add(players[i].getShipController().getShipView().getImageView());
-            pane.getChildren().add(players[i].getShipController().getShipView().getHealthView());
-            pane.getChildren().add(players[i].getShipController().getShipView().getScore());
-        }
-    }
-
     private void setTimerConfiguration(ImageLoader imageLoader, Pane pane, Player[] players, AsteroidController asteroidController) {
         if (mainTimer == null)
             mainTimer = new MainTimer(players, context.getKeyTracker(), imageLoader, pane, asteroidController);
@@ -200,6 +157,24 @@ class GameManager {
         mainTimer.setPane(pane);
         mainTimer.setAsteroidController(asteroidController);
     }
+
+     /*private Parent endGame(GameState gameState) throws IOException {
+        Pane pane = new Pane();
+        Text text = new Text("Game over!");
+        text.setFont(Font.font("Verdana", FontWeight.BOLD, 40));
+        text.setFill(Color.DARKRED);
+        text.setEffect(new DropShadow(20, Color.BLACK));
+        text.setX(70);
+        text.setY(100);
+
+        Text player = new Text("Player: 1 won :)");
+        player.setX(70);
+        player.setY(150);
+
+        pane.getChildren().addAll(text, player);
+
+        return pane;
+    }*/
 }
 
 @Setter

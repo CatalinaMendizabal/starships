@@ -71,6 +71,8 @@ public class Player implements Serializable {
                 .keyBackward(keyBackward)
                 .keyRotateRight(keyRotateRight)
                 .keyShoot(keyShoot)
+                .changeShootingMode(changeShootingMode)
+                .isNormalShooting(isNormalShooting)
                 .build();
     }
 }
