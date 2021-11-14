@@ -8,6 +8,8 @@ import javafx.scene.layout.Pane;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import model.weapon.MultipleShooting;
+import model.weapon.SingleShooting;
 
 import java.io.Serializable;
 import java.util.List;
@@ -36,11 +38,15 @@ public class Player implements Serializable {
             else if (keyCode == keyRotateLeft) shipController.rotateLeft(secondsSinceLastFrame);
             else if (keyCode == keyRotateRight) shipController.rotateRight(secondsSinceLastFrame);
             else if (keyCode == keyShoot) {
-                shipController.fire(this, isNormalShooting);
+                shipController.fire(this);
                 List<ImageView> imageViews = shipController.getBulletController().renderBullets();
                 pane.getChildren().addAll(imageViews);
             }
-            else if (keyCode == changeShootingMode) isNormalShooting = !isNormalShooting;
+            else if (keyCode == changeShootingMode) {
+                isNormalShooting = !isNormalShooting;
+                if (isNormalShooting) shipController.getShip().setShootingStrategy(new SingleShooting());
+                else shipController.getShip().setShootingStrategy(new MultipleShooting());
+            }
         });
     }
 

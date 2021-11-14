@@ -52,14 +52,12 @@ public class ShipController implements Serializable {
     public ImageView updateDeath() {
         if (ship.getHealth() <= 0) {
             shipView.getHealthView().setVisible(false);
-            shipView.getPoints().setVisible(false);
+            shipView.getScore().setVisible(false);
             return shipView.getImageView();
         } else return null;
     }
 
-    public void fire(Player shooter, boolean isNormalShooting) {
-        //if (isNormalShooting) ship.setShootingStrategy(new SingleShooting());
-        //ship.setShootingStrategy(new MultipleShooting());
+    public void fire(Player shooter) {
         ship.fire(bulletController, shooter);
     }
 
@@ -71,9 +69,9 @@ public class ShipController implements Serializable {
             ship.move(to);
         }
     }
-    public void updateHealth() {
-        shipView.updateHealth(ship.getHealth());
-    }
+    public void updateHealth() {shipView.updateHealth(ship.getHealth());}
+
+
 
       public ShipControllerDTO toDTO() {
         return ShipControllerDTO.builder()

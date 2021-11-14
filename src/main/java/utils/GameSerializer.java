@@ -9,7 +9,7 @@ public class GameSerializer {
             return;
         }
         try {
-            FileOutputStream file = new FileOutputStream("saved-starships");
+            FileOutputStream file = new FileOutputStream("saveStarships");
             ObjectOutputStream out = new ObjectOutputStream(file);
 
             out.writeObject(state);
@@ -25,7 +25,7 @@ public class GameSerializer {
         GameState state = null;
         try {
             // Reading the object from a file
-            FileInputStream file = new FileInputStream("saved-starships");
+            FileInputStream file = new FileInputStream("saveStarships");
             ObjectInputStream in = new ObjectInputStream(file);
 
             // Method for deserialization of object

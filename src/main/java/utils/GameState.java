@@ -27,4 +27,5 @@ public class GameState implements Serializable {
             this.asteroids.add(asteroid.toDTO());
         }
     }
+
 }

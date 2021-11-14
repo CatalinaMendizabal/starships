@@ -7,6 +7,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import lombok.Data;
 
@@ -14,29 +15,41 @@ import lombok.Data;
 public class ShipView {
     ImageView imageView;
     Group healthView;
-    Rectangle healthFill = new Rectangle(100, 10);
-    Text points = new Text();
+    Rectangle healthFill = new Rectangle(500, 20);
+    Text score = new Text();
+
 
     public ShipView(Image image, int x, int y) {
         this.imageView = new ImageView(image);
         imageView.setLayoutX(x);
         imageView.setLayoutY(y);
-        healthFill.setFill(Color.RED);
+        healthFill.setFill(Color.web("#5A2363"));
+        healthFill.setArcHeight(20);
+        healthFill.setArcWidth(20);
 
-        Rectangle rectangle = new Rectangle(100, 10);
+
+        Rectangle rectangle = new Rectangle(500, 20);
         rectangle.setFill(Color.TRANSPARENT);
-        rectangle.setStroke(Color.RED);
+        rectangle.setStroke(Color.BLUEVIOLET);
+        rectangle.setArcHeight(20);
+        rectangle.setArcWidth(20);
         rectangle.setStrokeWidth(2);
 
         healthView = new Group(rectangle, healthFill);
-        healthView.setLayoutX(x);
-        healthView.setLayoutY(y + 100);
+        healthView.setLayoutX(x - 180);
+        healthView.setLayoutY(15);
 
-        points.setLayoutX(x);
-        points.setLayoutY(y);
-        points.setFont(Font.font(20));
-        points.setFill(Color.WHITE);
-        points.setText("0");
+        score.setLayoutX(x + 350);
+        score.setLayoutY(40);
+        score.setFont(Font.font("Verdana", FontWeight.BOLD, 30));
+        score.setFill(Color.WHITE);
+        score.setText("0");
+    }
+
+    public void updateHealth(Double health) {healthFill.setWidth(health * 2.5);}
+
+    public void updatePoints(int points) {
+        this.score.setText(String.valueOf(points));
     }
 
     public double getLayoutX() {
@@ -58,17 +71,6 @@ public class ShipView {
     public void move(Vector2 to) {
         imageView.setLayoutX(to.getX());
         imageView.setLayoutY(to.getY());
-        healthView.setLayoutX(to.getX());
-        healthView.setLayoutY(to.getY() + 100);
-        points.setLayoutX(to.getX());
-        points.setLayoutY(to.getY());
     }
 
-    public void updateHealth(Double health) {
-        healthFill.setWidth(health/200 * 100);
-    }
-
-    public void updatePoints(int points) {
-        this.points.setText(String.valueOf(points));
-    }
 }

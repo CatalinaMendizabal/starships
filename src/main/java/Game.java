@@ -25,7 +25,6 @@ import model.entities.Asteroid;
 import utils.Config;
 import utils.GameSerializer;
 import utils.GameState;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -101,8 +100,6 @@ class GameManager {
                     rootSetter.setRoot(init());
                 }
                 rootSetter.setRoot(loadGame(GameSerializer.loadGame()));
-
-               // rootSetter.setRoot(loadGame(gameState));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -127,6 +124,23 @@ class GameManager {
         return text;
     }
 
+    private Parent endGame(GameState gameState) throws IOException {
+        Pane pane = new Pane();
+        Text text = new Text("Game over!");
+        text.setFont(Font.font("Verdana", FontWeight.BOLD, 40));
+        text.setFill(Color.DARKRED);
+        text.setEffect(new DropShadow(20, Color.BLACK));
+        text.setX(70);
+        text.setY(100);
+
+        Text player = new Text("Player: 1 won :)");
+        player.setX(70);
+        player.setY(150);
+
+        pane.getChildren().addAll(text, player);
+
+        return pane;
+    }
 
     private Parent loadGame(GameState gameState) throws IOException {
 
@@ -137,87 +151,74 @@ class GameManager {
 
         Pane pane = new Pane();
         pane.setBackground(new Background(backgroundImage));
-
+        Player [] players;
+        AsteroidController asteroidController;
 
         if (gameState == null) {
-            Player[] players = new Player[Config.PLAYERS];
-            for (int i = 0; i < Config.PLAYERS; i++) {
-
-                players[i] = new Player(i, 0, Config.LIVES, Objects.requireNonNull(Config.getPlayerShips())[i],
-                        Config.PLAYER_KEYS[i][0],
-                        Config.PLAYER_KEYS[i][1],
-                        Config.PLAYER_KEYS[i][2],
-                        Config.PLAYER_KEYS[i][3],
-                        Config.PLAYER_KEYS[i][4],
-                        Config.PLAYER_KEYS[i][5], true
-                );
-
-                pane.getChildren().add(players[i].getShipController().getShipView().getImageView());
-                pane.getChildren().add(players[i].getShipController().getShipView().getHealthView());
-                pane.getChildren().add(players[i].getShipController().getShipView().getPoints());
-            }
-
-
-            AsteroidController asteroidController = new AsteroidController();
-            if (mainTimer == null)
-                mainTimer = new MainTimer(players, context.getKeyTracker(), imageLoader, pane, asteroidController);
-            mainTimer.setPlayers(players);
-            mainTimer.setKeyTracker(context.getKeyTracker());
-            mainTimer.setImageLoader(imageLoader);
-            mainTimer.setPane(pane);
-            mainTimer.setAsteroidController(asteroidController);
-
-
-            pane.setOnKeyPressed(event -> {
-                if (event.getCode() == KeyCode.P) {
-                    isIntro = !isIntro;
-                    try {
-                        mainTimer.stop();
-                        mainTimer.setPaused(true);
-                        rootSetter.setRoot(loadIntro(new GameState(players, asteroidController.getAsteroids())));
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                } else if (event.getCode() == KeyCode.ESCAPE) System.exit(0);
-            });
+            players = new Player[Config.PLAYERS];
+            configGamePlayers(pane, players);
+            asteroidController = new AsteroidController();
         } else {
-            Player[] players = gameState.getPlayers().stream().map(PlayerDTO::toPlayer).toArray(Player[]::new);
-            for (Player player : players) {
-                pane.getChildren().add(player.getShipController().getShipView().getImageView());
-                pane.getChildren().add(player.getShipController().getShipView().getHealthView());
-                pane.getChildren().add(player.getShipController().getShipView().getPoints());
-                pane.getChildren().addAll(player.getShipController().getBulletController().renderBullets());
-            }
-
-            AsteroidController asteroidController = new AsteroidController(gameState.getAsteroids().stream().map(AsteroidDTO::toAsteroid).collect(Collectors.toList()));
+            players = gameState.getPlayers().stream().map(PlayerDTO::toPlayer).toArray(Player[]::new);
+            configGameSavePlayers(pane, players);
+            asteroidController = new AsteroidController(gameState.getAsteroids().stream().map(AsteroidDTO::toAsteroid).collect(Collectors.toList()));
             pane.getChildren().addAll(asteroidController.getViews());
-            if (mainTimer == null)
-                mainTimer = new MainTimer(players, context.getKeyTracker(), imageLoader, pane, asteroidController);
-            mainTimer.setPlayers(players);
-            mainTimer.setKeyTracker(context.getKeyTracker());
-            mainTimer.setImageLoader(imageLoader);
-            mainTimer.setPane(pane);
-            mainTimer.setAsteroidController(asteroidController);
-
-            pane.setOnKeyPressed(event -> {
-                if (event.getCode() == KeyCode.P) {
-                    isIntro = !isIntro;
-                    try {
-                        mainTimer.stop();
-                        mainTimer.setPaused(true);
-                        rootSetter.setRoot(loadIntro(new GameState(players, asteroidController.getAsteroids())));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-            });
         }
+
+        setTimerConfiguration(imageLoader, pane, players, asteroidController);
+
+
+        pane.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.P) {
+                isIntro = !isIntro;
+                try {
+                    mainTimer.stop();
+                    mainTimer.setPaused(true);
+                    rootSetter.setRoot(loadIntro(new GameState(players, asteroidController.getAsteroids())));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else if (event.getCode() == KeyCode.ESCAPE) System.exit(0);
+        });
 
         mainTimer.start();
 
         return pane;
+    }
+
+    private void configGameSavePlayers(Pane pane, Player[] players) {
+        for (Player player : players) {
+            pane.getChildren().add(player.getShipController().getShipView().getImageView());
+            pane.getChildren().add(player.getShipController().getShipView().getHealthView());
+            pane.getChildren().add(player.getShipController().getShipView().getScore());
+            pane.getChildren().addAll(player.getShipController().getBulletController().renderBullets());
+        }
+    }
+
+    private void configGamePlayers(Pane pane, Player[] players) {
+        for (int i = 0; i < Config.PLAYERS; i++) {
+            players[i] = new Player(i, 0, Config.LIVES, Objects.requireNonNull(Config.getPlayerShips())[i],
+                    Config.PLAYER_KEYS[i][0],
+                    Config.PLAYER_KEYS[i][1],
+                    Config.PLAYER_KEYS[i][2],
+                    Config.PLAYER_KEYS[i][3],
+                    Config.PLAYER_KEYS[i][4],
+                    Config.PLAYER_KEYS[i][5], true);
+
+            pane.getChildren().add(players[i].getShipController().getShipView().getImageView());
+            pane.getChildren().add(players[i].getShipController().getShipView().getHealthView());
+            pane.getChildren().add(players[i].getShipController().getShipView().getScore());
+        }
+    }
+
+    private void setTimerConfiguration(ImageLoader imageLoader, Pane pane, Player[] players, AsteroidController asteroidController) {
+        if (mainTimer == null)
+            mainTimer = new MainTimer(players, context.getKeyTracker(), imageLoader, pane, asteroidController);
+        mainTimer.setPlayers(players);
+        mainTimer.setKeyTracker(context.getKeyTracker());
+        mainTimer.setImageLoader(imageLoader);
+        mainTimer.setPane(pane);
+        mainTimer.setAsteroidController(asteroidController);
     }
 }
 
@@ -232,7 +233,6 @@ class MainTimer extends GameTimer {
     CollisionEngine collisionEngine = new CollisionEngine();
 
     boolean paused = false;
-
 
     public MainTimer(Player[] players, KeyTracker keyTracker, ImageLoader imageLoader, Pane pane, AsteroidController asteroidController) {
         this.players = players;
@@ -257,7 +257,7 @@ class MainTimer extends GameTimer {
 
     private void updateHealths() {
         for (Player player : players) {
-            player.getShipController().updateHealth();
+            if (player.getShipController().getShip().getHealth() > 0) player.getShipController().updateHealth();
         }
     }
 
@@ -278,8 +278,7 @@ class MainTimer extends GameTimer {
 
         asteroidController.updatePositions(secondsSinceLastFrame);
 
-        List<Collider2> colliders = new ArrayList<>();
-        colliders.addAll(asteroidController.getAsteroids());
+        List<Collider2> colliders = new ArrayList<>(asteroidController.getAsteroids());
         for (Player player : players) {
             colliders.add(player.getShipController().getShip());
             colliders.addAll(player.getShipController().getBulletController().getBullets());
