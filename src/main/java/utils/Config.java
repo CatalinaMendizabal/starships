@@ -5,7 +5,7 @@ import controller.ShipController;
 import edu.austral.dissis.starships.file.ImageLoader;
 import javafx.scene.input.KeyCode;
 import javafx.scene.shape.Rectangle;
-import model.entities.Ship;
+import model.components.Ship;
 import model.weapon.SingleShooting;
 import view.ShipView;
 import java.io.IOException;

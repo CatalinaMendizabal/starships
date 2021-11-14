@@ -7,10 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import model.Player;
-import model.ShipControllerDTO;
-import model.entities.Ship;
-import model.weapon.MultipleShooting;
-import model.weapon.SingleShooting;
+import model.components.data.ShipControllerDTO;
+import model.components.Ship;
 import view.ShipView;
 
 import java.io.Serializable;

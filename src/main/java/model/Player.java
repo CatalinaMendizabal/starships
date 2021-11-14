@@ -8,6 +8,7 @@ import javafx.scene.layout.Pane;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import model.components.data.PlayerDTO;
 import model.weapon.MultipleShooting;
 import model.weapon.SingleShooting;
 

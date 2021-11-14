@@ -5,8 +5,8 @@ import edu.austral.dissis.starships.vector.Vector2;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import lombok.SneakyThrows;
-import model.BulletControllerDTO;
-import model.entities.Bullet;
+import model.components.data.BulletControllerDTO;
+import model.components.Bullet;
 import view.BulletView;
 
 import java.util.*;

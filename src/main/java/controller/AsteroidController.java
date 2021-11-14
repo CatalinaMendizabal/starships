@@ -6,7 +6,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Circle;
 import lombok.SneakyThrows;
-import model.entities.Asteroid;
+import model.components.Asteroid;
 import view.AsteroidView;
 
 import java.util.*;

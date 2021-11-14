@@ -3,7 +3,7 @@ package model.weapon;
 import controller.BulletController;
 import javafx.scene.shape.Circle;
 import model.Player;
-import model.entities.Bullet;
+import model.components.Bullet;
 
 public class SingleShooting implements Shooting {
 

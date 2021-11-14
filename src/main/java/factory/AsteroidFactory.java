@@ -1,7 +1,7 @@
 package factory;
 
 import javafx.scene.shape.Circle;
-import model.entities.Asteroid;
+import model.components.Asteroid;
 
 import java.util.Random;
 
