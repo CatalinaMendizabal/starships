@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 @Data
 @Builder
-public class BulletDTO implements Serializable {
+public class BulletData implements Serializable {
     double posX;
     double posY;
     double rotate;

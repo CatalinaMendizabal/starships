@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 @Data
 @Builder
-public class AsteroidDTO implements Serializable {
+public class AsteroidData implements Serializable {
     private double health;
     private double speed;
     private double centerX;

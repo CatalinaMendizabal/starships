@@ -1,38 +1,25 @@
 import UI.IntroGameUI;
-import UI.IntroductionButton;
 import UI.LoadGameUI;
-import collider.Collider2;
 import controller.AsteroidController;
 import edu.austral.dissis.starships.collision.CollisionEngine;
 import edu.austral.dissis.starships.file.ImageLoader;
 import edu.austral.dissis.starships.game.*;
 import factory.AsteroidFactory;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import lombok.NonNull;
 import lombok.Setter;
-import model.components.data.AsteroidDTO;
+import model.components.data.AsteroidData;
 import model.Player;
-import model.components.data.PlayerDTO;
-import model.components.Asteroid;
+import model.components.data.PlayerData;
 import utils.Config;
 import model.serializer.GameSerializer;
 import model.serializer.GameState;
 import utils.KeyConfiguration;
 import utils.PlayerManagement;
 import utils.SpawnAsteroids;
-
 import java.io.IOException;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class Game extends GameApplication {
@@ -121,9 +108,9 @@ class GameManager {
             keyConfiguration.configKeys(players, pane);
             asteroidController = new AsteroidController();
         } else {
-            players = gameState.getPlayers().stream().map(PlayerDTO::toPlayer).toArray(Player[]::new);
+            players = gameState.getPlayers().stream().map(PlayerData::toPlayer).toArray(Player[]::new);
             keyConfiguration.configSaveGameKeys(players, pane);
-            asteroidController = new AsteroidController(gameState.getAsteroids().stream().map(AsteroidDTO::toAsteroid).collect(Collectors.toList()));
+            asteroidController = new AsteroidController(gameState.getAsteroids().stream().map(AsteroidData::toAsteroid).collect(Collectors.toList()));
             pane.getChildren().addAll(asteroidController.getViews());
         }
 

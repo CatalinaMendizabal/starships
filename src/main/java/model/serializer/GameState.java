@@ -1,9 +1,9 @@
 package model.serializer;
 
 import lombok.Data;
-import model.components.data.AsteroidDTO;
+import model.components.data.AsteroidData;
 import model.Player;
-import model.components.data.PlayerDTO;
+import model.components.data.PlayerData;
 import model.components.Asteroid;
 
 
@@ -14,8 +14,8 @@ import java.util.List;
 @Data
 public class GameState implements Serializable {
 
-    private final List<PlayerDTO> players;
-    private final List<AsteroidDTO> asteroids;
+    private final List<PlayerData> players;
+    private final List<AsteroidData> asteroids;
 
     public GameState(Player[] players, List<Asteroid> asteroids) {
         this.players = new ArrayList<>();

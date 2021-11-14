@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import model.Player;
-import model.components.data.ShipControllerDTO;
+import model.components.data.ShipControllerData;
 import model.components.Ship;
 import view.ShipView;
 
@@ -71,8 +71,8 @@ public class ShipController implements Serializable {
 
 
 
-      public ShipControllerDTO toDTO() {
-        return ShipControllerDTO.builder()
+      public ShipControllerData toDTO() {
+        return ShipControllerData.builder()
                 .imageName("starship.png")
                 .ship(ship.toDTO())
                 .bulletController(bulletController.toDTO())

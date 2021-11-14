@@ -5,7 +5,7 @@ import edu.austral.dissis.starships.vector.Vector2;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 import lombok.Data;
-import model.components.data.BulletDTO;
+import model.components.data.BulletData;
 import model.Player;
 
 @Data
@@ -48,8 +48,8 @@ public class Bullet implements Collider2 {
     public void handleCollisionWith(Bullet bullet) {}
 
 
-    public BulletDTO toDTO() {
-        return BulletDTO.builder()
+    public BulletData toDTO() {
+        return BulletData.builder()
                 .speed(speed)
                 .damage(damage)
                 .posX(shape.getLayoutX())

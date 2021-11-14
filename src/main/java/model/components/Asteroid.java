@@ -6,7 +6,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import model.components.data.AsteroidDTO;
+import model.components.data.AsteroidData;
 
 @AllArgsConstructor
 @Data
@@ -42,8 +42,8 @@ public class Asteroid implements Collider2 {
         health = health - bullet.getDamage();
     }
 
-        public AsteroidDTO toDTO() {
-        return AsteroidDTO.builder()
+        public AsteroidData toDTO() {
+        return AsteroidData.builder()
                 .health(health)
                 .centerX(((Circle) shape).getCenterX())
                 .centerY(((Circle) shape).getCenterY())

@@ -10,11 +10,11 @@ import java.io.Serializable;
 
 @Data
 @Builder
-public class PlayerDTO implements Serializable {
+public class PlayerData implements Serializable {
     private int id;
     private int score;
     private int lives;
-    private ShipControllerDTO shipController;
+    private ShipControllerData shipController;
 
     private KeyCode keyForward;
     private KeyCode keyRotateLeft;

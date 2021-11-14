@@ -8,7 +8,7 @@ import javafx.scene.layout.Pane;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import model.components.data.PlayerDTO;
+import model.components.data.PlayerData;
 import model.weapon.MultipleShooting;
 import model.weapon.SingleShooting;
 
@@ -60,8 +60,8 @@ public class Player implements Serializable {
         shipController.getShipView().updatePoints(score);
     }
 
-    public PlayerDTO toDTO() {
-        return PlayerDTO.builder()
+    public PlayerData toDTO() {
+        return PlayerData.builder()
                 .id(id)
                 .score(score)
                 .lives(lives)

@@ -14,7 +14,7 @@ import java.util.TimerTask;
 
 @Data
 @Builder
-public class ShipDTO implements Serializable {
+public class ShipData implements Serializable {
     private double health;
     private double posX;
     private double posY;

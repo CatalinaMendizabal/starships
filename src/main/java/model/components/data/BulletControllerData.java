@@ -10,10 +10,10 @@ import java.util.stream.Collectors;
 
 @Data
 @Builder
-public class BulletControllerDTO implements Serializable {
-    List<BulletDTO> bullets;
+public class BulletControllerData implements Serializable {
+    List<BulletData> bullets;
 
     public BulletController toBulletController() {
-        return new BulletController(this.bullets.stream().map(BulletDTO::toBullet).collect(Collectors.toList()));
+        return new BulletController(this.bullets.stream().map(BulletData::toBullet).collect(Collectors.toList()));
     }
 }

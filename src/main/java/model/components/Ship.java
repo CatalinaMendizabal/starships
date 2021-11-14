@@ -9,7 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import model.Player;
-import model.components.data.ShipDTO;
+import model.components.data.ShipData;
 import model.weapon.Shooting;
 
 @AllArgsConstructor
@@ -67,8 +67,8 @@ public class Ship implements Collider2 {
         }
     }
 
-    public ShipDTO toDTO() {
-        return ShipDTO.builder()
+    public ShipData toDTO() {
+        return ShipData.builder()
                 .health(health)
                 .shootingStrategy(shootingStrategy)
                 .speed(speed)

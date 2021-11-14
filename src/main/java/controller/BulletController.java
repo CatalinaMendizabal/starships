@@ -5,7 +5,7 @@ import edu.austral.dissis.starships.vector.Vector2;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import lombok.SneakyThrows;
-import model.components.data.BulletControllerDTO;
+import model.components.data.BulletControllerData;
 import model.components.Bullet;
 import view.BulletView;
 
@@ -87,8 +87,8 @@ public class BulletController {
         return result;
     }
 
-      public BulletControllerDTO toDTO() {
-        return BulletControllerDTO.builder()
+      public BulletControllerData toDTO() {
+        return BulletControllerData.builder()
                 .bullets(bullets.stream().map(Bullet::toDTO).collect(Collectors.toList()))
                 .build();
     }

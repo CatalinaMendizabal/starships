@@ -5,18 +5,16 @@ import edu.austral.dissis.starships.file.ImageLoader;
 import lombok.Builder;
 import lombok.Data;
 import lombok.SneakyThrows;
-import model.components.data.BulletControllerDTO;
-import model.components.data.ShipDTO;
 import view.ShipView;
 
 import java.io.Serializable;
 
 @Data
 @Builder
-public class ShipControllerDTO implements Serializable {
+public class ShipControllerData implements Serializable {
     private String imageName;
-    private ShipDTO ship;
-    private BulletControllerDTO bulletController;
+    private ShipData ship;
+    private BulletControllerData bulletController;
 
     @SneakyThrows
     public ShipController toShipController() {
