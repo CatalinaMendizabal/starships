@@ -5,7 +5,7 @@ import model.components.Asteroid;
 import model.components.Bullet;
 import model.components.Ship;
 
-public interface Collider2 extends Collider<Collider2> {
+public interface Collisionable extends Collider<Collisionable> {
     void handleCollisionWith(Asteroid asteroid);
 
     void handleCollisionWith(Ship ship);

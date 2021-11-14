@@ -1,6 +1,6 @@
 package utils;
 
-import collider.Collider2;
+import collider.Collisionable;
 import controller.AsteroidController;
 import edu.austral.dissis.starships.collision.CollisionEngine;
 import edu.austral.dissis.starships.game.KeyTracker;
@@ -26,7 +26,7 @@ public class PlayerManagement {
 
         asteroidController.updatePositions(secondsSinceLastFrame);
 
-        List<Collider2> colliders = new ArrayList<>(asteroidController.getAsteroids());
+        List<Collisionable> colliders = new ArrayList<>(asteroidController.getAsteroids());
         for (Player player : players) {
             colliders.add(player.getShipController().getShip());
             colliders.addAll(player.getShipController().getBulletController().getBullets());

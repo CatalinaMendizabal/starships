@@ -1,6 +1,6 @@
 package model.components;
 
-import collider.Collider2;
+import collider.Collisionable;
 import edu.austral.dissis.starships.vector.Vector2;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
@@ -10,14 +10,14 @@ import model.components.data.AsteroidData;
 
 @AllArgsConstructor
 @Data
-public class Asteroid implements Collider2 {
+public class Asteroid implements Collisionable {
 
     Double health;
     Shape shape;
     double speed;
 
     @Override
-    public void handleCollisionWith(Collider2 collider) {
+    public void handleCollisionWith(Collisionable collider) {
         collider.handleCollisionWith(this);
     }
 

@@ -1,6 +1,6 @@
 package model.components;
 
-import collider.Collider2;
+import collider.Collisionable;
 import controller.BulletController;
 import edu.austral.dissis.starships.vector.Vector2;
 import javafx.scene.shape.Rectangle;
@@ -15,7 +15,7 @@ import model.weapon.Shooting;
 @AllArgsConstructor
 @Data
 @Builder
-public class Ship implements Collider2 {
+public class Ship implements Collisionable {
     private Double health;
     private Shooting shootingStrategy;
     private Shape shape;
@@ -26,7 +26,7 @@ public class Ship implements Collider2 {
     }
 
     @Override
-    public void handleCollisionWith(Collider2 collider) {
+    public void handleCollisionWith(Collisionable collider) {
         collider.handleCollisionWith(this);
     }
 

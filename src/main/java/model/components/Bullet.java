@@ -1,6 +1,6 @@
 package model.components;
 
-import collider.Collider2;
+import collider.Collisionable;
 import edu.austral.dissis.starships.vector.Vector2;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
@@ -9,7 +9,7 @@ import model.components.data.BulletData;
 import model.Player;
 
 @Data
-public class Bullet implements Collider2 {
+public class Bullet implements Collisionable {
 
     Shape shape;
     double speed;
@@ -24,7 +24,7 @@ public class Bullet implements Collider2 {
     }
 
     @Override
-    public void handleCollisionWith(Collider2 collider) {
+    public void handleCollisionWith(Collisionable collider) {
         // double dispatch
         collider.handleCollisionWith(this);
     }
