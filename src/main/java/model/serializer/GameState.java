@@ -20,11 +20,11 @@ public class GameState implements Serializable {
     public GameState(Player[] players, List<Asteroid> asteroids) {
         this.players = new ArrayList<>();
         for (Player player : players) {
-            this.players.add(player.toDTO());
+            this.players.add(player.buildData());
         }
         this.asteroids = new ArrayList<>();
         for (Asteroid asteroid : asteroids) {
-            this.asteroids.add(asteroid.toDTO());
+            this.asteroids.add(asteroid.buildData());
         }
     }
 

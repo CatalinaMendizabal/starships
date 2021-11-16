@@ -67,7 +67,7 @@ public class Ship implements Collisionable {
         }
     }
 
-    public ShipData toDTO() {
+    public ShipData buildData() {
         return ShipData.builder()
                 .health(health)
                 .shootingStrategy(shootingStrategy)

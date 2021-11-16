@@ -9,8 +9,5 @@ public interface Shooting extends Serializable {
 
     void shoot(Player shooter, BulletController bulletController, double x, double y, double angle);
 
-    void setWaitABit(double waitABit);
-
-    double getWaitABit();
 }
 

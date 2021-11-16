@@ -87,9 +87,9 @@ public class BulletController {
         return result;
     }
 
-      public BulletControllerData toDTO() {
+      public BulletControllerData buildData() {
         return BulletControllerData.builder()
-                .bullets(bullets.stream().map(Bullet::toDTO).collect(Collectors.toList()))
+                .bullets(bullets.stream().map(Bullet::buildData).collect(Collectors.toList()))
                 .build();
     }
 

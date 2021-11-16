@@ -17,9 +17,7 @@ public class Asteroid implements Collisionable {
     double speed;
 
     @Override
-    public void handleCollisionWith(Collisionable collider) {
-        collider.handleCollisionWith(this);
-    }
+    public void handleCollisionWith(Collisionable collider) {collider.handleCollisionWith(this);}
 
     public void move(Vector2 to) {
         ((Circle) shape).setCenterX(to.getX() + health/2);
@@ -27,9 +25,7 @@ public class Asteroid implements Collisionable {
     }
 
     @Override
-    public void handleCollisionWith(Asteroid asteroid) {
-
-    }
+    public void handleCollisionWith(Asteroid asteroid) {}
 
     @Override
     public void handleCollisionWith(Ship ship) {
@@ -42,7 +38,7 @@ public class Asteroid implements Collisionable {
         health = health - bullet.getDamage();
     }
 
-        public AsteroidData toDTO() {
+        public AsteroidData buildData() {
         return AsteroidData.builder()
                 .health(health)
                 .centerX(((Circle) shape).getCenterX())

@@ -24,10 +24,7 @@ public class Bullet implements Collisionable {
     }
 
     @Override
-    public void handleCollisionWith(Collisionable collider) {
-        // double dispatch
-        collider.handleCollisionWith(this);
-    }
+    public void handleCollisionWith(Collisionable collider) {collider.handleCollisionWith(this);} // double dispatch
 
     public void move(Vector2 to) {
         shape.setLayoutX(to.getX());
@@ -48,7 +45,7 @@ public class Bullet implements Collisionable {
     public void handleCollisionWith(Bullet bullet) {}
 
 
-    public BulletData toDTO() {
+    public BulletData buildData() {
         return BulletData.builder()
                 .speed(speed)
                 .damage(damage)

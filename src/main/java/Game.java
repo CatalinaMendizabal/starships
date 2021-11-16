@@ -198,5 +198,4 @@ class MainTimer extends GameTimer {
         playerManagement.updateDeaths(players, pane, asteroidController);
         spawnAsteroids.spawnAsteroid(asteroidFactory, asteroidController, imageLoader, pane);
     }
-
 }

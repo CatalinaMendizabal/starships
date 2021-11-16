@@ -69,13 +69,11 @@ public class ShipController implements Serializable {
     }
     public void updateHealth() {shipView.updateHealth(ship.getHealth());}
 
-
-
-      public ShipControllerData toDTO() {
+      public ShipControllerData buildData() {
         return ShipControllerData.builder()
                 .imageName("starship.png")
-                .ship(ship.toDTO())
-                .bulletController(bulletController.toDTO())
+                .ship(ship.buildData())
+                .bulletController(bulletController.buildData())
                 .build();
     }
 }

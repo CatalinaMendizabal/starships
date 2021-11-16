@@ -60,12 +60,12 @@ public class Player implements Serializable {
         shipController.getShipView().updatePoints(score);
     }
 
-    public PlayerData toDTO() {
+    public PlayerData buildData() {
         return PlayerData.builder()
                 .id(id)
                 .score(score)
                 .lives(lives)
-                .shipController(shipController.toDTO())
+                .shipController(shipController.buildData())
                 .keyForward(keyForward)
                 .keyRotateLeft(keyRotateLeft)
                 .keyBackward(keyBackward)

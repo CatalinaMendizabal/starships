@@ -13,7 +13,5 @@ import java.util.stream.Collectors;
 public class BulletControllerData implements Serializable {
     List<BulletData> bullets;
 
-    public BulletController toBulletController() {
-        return new BulletController(this.bullets.stream().map(BulletData::toBullet).collect(Collectors.toList()));
-    }
+    public BulletController toBulletController() {return new BulletController(this.bullets.stream().map(BulletData::toBullet).collect(Collectors.toList()));}
 }
