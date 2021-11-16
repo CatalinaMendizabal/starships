@@ -25,13 +25,13 @@ public class ShipController implements Serializable {
 
     public void updateHealth() {shipView.updateHealth(ship.getHealth());}
 
-    public void moveForward(Double secondsSinceLastFrame, Pane pane) {movementController.moveForward(secondsSinceLastFrame, pane);}
+    public void moveForward(Double lastFrame, Pane pane) {movementController.moveForward(lastFrame, pane);}
 
-    public void moveBackward(Double secondsSinceLastFrame, Pane pane) {movementController.moveBackward(secondsSinceLastFrame, pane);}
+    public void moveBackward(Double lastFrame, Pane pane) {movementController.moveBackward(lastFrame, pane);}
 
-    public void rotateLeft(Double secondsSinceLastFrame) {movementController.rotateLeft(secondsSinceLastFrame);}
+    public void rotateLeft(Double lastFrame) {movementController.rotateLeft(lastFrame);}
 
-    public void rotateRight(Double secondsSinceLastFrame) {movementController.rotateRight(secondsSinceLastFrame);}
+    public void rotateRight(Double lastFrame) {movementController.rotateRight(lastFrame);}
 
     public ImageView deathControl() {
         if (ship.getHealth() <= 0) {

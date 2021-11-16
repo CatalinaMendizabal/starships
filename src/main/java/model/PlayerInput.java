@@ -16,12 +16,12 @@ public class PlayerInput implements Serializable {
         this.player = player;
     }
 
-    public void updateInput(Pane pane, KeyTracker keyTracker, double secondsSinceLastFrame) {
+    public void updateInput(Pane pane, KeyTracker keyTracker, double lastFrame) {
         keyTracker.getKeySet().forEach(keyCode -> {
-            if (keyCode == player.getForward()) player.getShipController().moveForward(secondsSinceLastFrame, pane);
-            else if (keyCode == player.getBackward()) player.getShipController().moveBackward(secondsSinceLastFrame, pane);
-            else if (keyCode == player.getRotateLeft()) player.getShipController().rotateLeft(secondsSinceLastFrame);
-            else if (keyCode == player.getRotateRight()) player.getShipController().rotateRight(secondsSinceLastFrame);
+            if (keyCode == player.getForward()) player.getShipController().moveForward(lastFrame, pane);
+            else if (keyCode == player.getBackward()) player.getShipController().moveBackward(lastFrame, pane);
+            else if (keyCode == player.getRotateLeft()) player.getShipController().rotateLeft(lastFrame);
+            else if (keyCode == player.getRotateRight()) player.getShipController().rotateRight(lastFrame);
             else if (keyCode == player.getChangeShootingMode()) {
                 player.setNormalShooting(!player.isNormalShooting());
                 if (player.isNormalShooting())

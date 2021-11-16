@@ -12,28 +12,28 @@ public class MovementController implements Serializable {
         this.shipController = shipController;
     }
 
-    public void moveForward(Double secondsSinceLastFrame, Pane pane) {
-        double movement = secondsSinceLastFrame * shipController.getShip().getSpeed();
+    public void moveForward(Double lastFrame, Pane pane) {
+        double movement = lastFrame * shipController.getShip().getSpeed();
         Vector2 movementVector = Vector2.vectorFromModule(movement, (Math.toRadians(shipController.getShipView().getRotate()) - Math.PI / 2));
         Vector2 from = Vector2.vector((float) shipController.getShipView().getLayoutX(), (float) shipController.getShipView().getLayoutY());
         moveShip(pane, movementVector, from);
     }
 
-    public void moveBackward(Double secondsSinceLastFrame, Pane pane) {
-        double movement = secondsSinceLastFrame * shipController.getShip().getSpeed();
+    public void moveBackward(Double lastFrame, Pane pane) {
+        double movement = lastFrame * shipController.getShip().getSpeed();
         Vector2 movementVector = Vector2.vectorFromModule(-movement, (Math.toRadians(shipController.getShipView().getRotate()) - Math.PI / 2));
         Vector2 from = Vector2.vector(shipController.getShipView().getLayoutX(), shipController.getShipView().getLayoutY());
         moveShip(pane, movementVector, from);
     }
 
-    public void rotateLeft(Double secondsSinceLastFrame) {
-        double movement = secondsSinceLastFrame * shipController.getShip().getSpeed();
+    public void rotateLeft(Double lastFrame) {
+        double movement = lastFrame * shipController.getShip().getSpeed();
         shipController.getShipView().setRotate(shipController.getShipView().getRotate() - movement);
         shipController.getShip().getShape().setRotate(shipController.getShipView().getRotate() - movement);
     }
 
-    public void rotateRight(Double secondsSinceLastFrame) {
-        double movement = secondsSinceLastFrame * shipController.getShip().getSpeed();
+    public void rotateRight(Double lastFrame) {
+        double movement = lastFrame * shipController.getShip().getSpeed();
         shipController.getShipView().setRotate(shipController.getShipView().getRotate() + movement);
         shipController.getShip().getShape().setRotate(shipController.getShipView().getRotate() + movement);
     }

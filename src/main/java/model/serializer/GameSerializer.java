@@ -11,9 +11,7 @@ public class GameSerializer {
         try {
             FileOutputStream file = new FileOutputStream("saveStarships");
             ObjectOutputStream out = new ObjectOutputStream(file);
-
             out.writeObject(state);
-
             out.close();
             file.close();
         } catch (IOException ex) {
@@ -24,13 +22,9 @@ public class GameSerializer {
     public static GameState loadGame() {
         GameState state = null;
         try {
-            // Reading the object from a file
             FileInputStream file = new FileInputStream("saveStarships");
             ObjectInputStream in = new ObjectInputStream(file);
-
-            // Method for deserialization of object
             state = (GameState) in.readObject();
-
             in.close();
             file.close();
         } catch (IOException | ClassNotFoundException ex) {

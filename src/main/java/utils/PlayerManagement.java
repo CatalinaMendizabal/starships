@@ -18,13 +18,13 @@ public class PlayerManagement {
         }
     }
 
-    public void updatePosition(Double secondsSinceLastFrame, Player[] players, Pane pane, KeyTracker keyTracker, CollisionEngine collisionEngine, AsteroidController asteroidController) {
+    public void updatePosition(Double lastFrame, Player[] players, Pane pane, KeyTracker keyTracker, CollisionEngine collisionEngine, AsteroidController asteroidController) {
         for (Player player : players) {
-            player.updateInput(pane, keyTracker, secondsSinceLastFrame);
-            player.getShipController().getBulletController().updatePos(secondsSinceLastFrame);
+            player.updateInput(pane, keyTracker, lastFrame);
+            player.getShipController().getBulletController().updatePos(lastFrame);
         }
 
-        asteroidController.updatePos(secondsSinceLastFrame);
+        asteroidController.updatePos(lastFrame);
 
         List<Collisionable> colliders = new ArrayList<>(asteroidController.getAsteroids());
         for (Player player : players) {

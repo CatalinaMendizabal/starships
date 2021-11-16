@@ -187,13 +187,13 @@ class MainTimer extends GameTimer {
     }
 
     @Override
-    public void nextFrame(double secondsSinceLastFrame) {
+    public void nextFrame(double lastFrame) {
         if (paused) {
-            secondsSinceLastFrame = 0;
+            lastFrame = 0;
             paused = false;
         }
         pane.requestFocus();
-        playerManagement.updatePosition(secondsSinceLastFrame, players, pane, keyTracker, collisionEngine, asteroidController);
+        playerManagement.updatePosition(lastFrame, players, pane, keyTracker, collisionEngine, asteroidController);
         playerManagement.updateHealths(players);
         playerManagement.updateDeaths(players, pane, asteroidController);
         spawnAsteroids.spawnAsteroid(asteroidFactory, asteroidController, imageLoader, pane);

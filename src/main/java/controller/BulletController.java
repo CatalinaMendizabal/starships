@@ -50,11 +50,11 @@ public class BulletController {
         return result;
     }
 
-    public void updatePos(Double secondsSinceLastFrame) {
+    public void updatePos(Double lastFrame) {
         for (int i = 0; i < bullets.size(); i++) {
             Bullet bullet = bullets.get(i);
             BulletView bulletView = bulletViews.get(i);
-            Vector2 movementVector = Vector2.vectorFromModule((bullet.getSpeed() * secondsSinceLastFrame), (Math.toRadians(bullet.getShape().getRotate())));
+            Vector2 movementVector = Vector2.vectorFromModule((bullet.getSpeed() * lastFrame), (Math.toRadians(bullet.getShape().getRotate())));
             Vector2 from = Vector2.vector(bullet.getShape().getLayoutX(), bullet.getShape().getLayoutY());
             Vector2 to = from.add(movementVector);
             bulletView.move(to);
