@@ -31,27 +31,55 @@ public class AsteroidController {
         this.asteroids = asteroids;
     }
 
+    public List<Asteroid> getAsteroids() {return asteroids;}
+
+    public List<ImageView> getViews() {return asteroidViews.stream().map(AsteroidView::getImageView).collect(Collectors.toList());}
+
     @SneakyThrows
-    public ImageView spawnAsteroid(Asteroid asteroid, ImageLoader imageLoader, double x, double y) {
+    public ImageView spawnAsteroid(Asteroid asteroid, ImageLoader imageLoader, double height, double width) {
+        Random random = new Random();
         Image image = imageLoader.loadFromResources("asteroid.png", asteroid.getHealth(), asteroid.getHealth());
 
-        Random random = new Random();
         if (random.nextBoolean()) {
-            x = random.nextBoolean() ? 0 - image.getWidth() : x + image.getWidth();
-            y = random.nextInt((int) y);
+            height = random.nextBoolean() ? 0 - image.getWidth() : height + image.getWidth();
+            width = random.nextInt((int) width);
         } else {
-            y = random.nextBoolean() ? 0 - image.getHeight() : y + image.getHeight();
-            x = random.nextInt((int) x);
+            width = random.nextBoolean() ? 0 - image.getHeight() : width + image.getHeight();
+            height = random.nextInt((int) height);
         }
-
         asteroids.add(asteroid);
-        AsteroidView asteroidView = new AsteroidView(image, x, y);
+        AsteroidView asteroidView = new AsteroidView(image, height, width);
         asteroidViews.add(asteroidView);
         asteroid.getShape().setRotate(asteroidView.getRotate());
+
         return asteroidView.getImageView();
     }
 
-    public void updatePositions(Double secondsSinceLastFrame) {
+    public void removeAsteroids(double width, double height) {
+        for (int i = 0; i < asteroids.size(); i++) {
+            Asteroid a = asteroids.get(i);
+            AsteroidView v = asteroidViews.get(i);
+            if (v.getLayoutX() < 0 - a.getHealth() * 2 || v.getLayoutX() > width + a.getHealth() * 2 || v.getLayoutY() < 0 - a.getHealth() * 2 || v.getLayoutY() > height + a.getHealth() * 2) {
+                a.setHealth(0.0);
+            }
+        }
+    }
+
+    public List<ImageView> deathControl() {
+        List<ImageView> deaths = new ArrayList<>();
+        for (int i = 0; i < asteroids.size(); i++) {
+            Asteroid a = asteroids.get(i);
+            AsteroidView v = asteroidViews.get(i);
+            if (a.getHealth() <= 0) {
+                deaths.add(v.getImageView());
+                asteroids.remove(a);
+                asteroidViews.remove(v);
+            }
+        }
+        return deaths;
+    }
+
+    public void updatePos(Double secondsSinceLastFrame) {
         for (int i = 0; i < asteroids.size(); i++) {
             Asteroid a = asteroids.get(i);
             AsteroidView v = asteroidViews.get(i);
@@ -64,38 +92,5 @@ public class AsteroidController {
             v.move(to);
             a.move(to);
         }
-    }
-
-    public List<Asteroid> getAsteroids() {
-        return asteroids;
-    }
-
-    public List<ImageView> updateDeaths() {
-        List<ImageView> deaths = new ArrayList<>();
-        for (int i = 0; i < asteroids.size(); i++) {
-            Asteroid a = asteroids.get(i);
-            AsteroidView v = asteroidViews.get(i);
-            if (a.getHealth() <= 0) {
-                deaths.add(v.getImageView());
-                asteroids.remove(a);
-                asteroidViews.remove(v);
-            }
-        }
-
-        return deaths;
-    }
-
-    public void killOutOfBounds(double width, double height) {
-        for (int i = 0; i < asteroids.size(); i++) {
-            Asteroid a = asteroids.get(i);
-            AsteroidView v = asteroidViews.get(i);
-            if (v.getLayoutX() < 0 - a.getHealth() * 2 || v.getLayoutX() > width + a.getHealth() * 2 || v.getLayoutY() < 0 - a.getHealth() * 2 || v.getLayoutY() > height + a.getHealth() * 2) {
-                a.setHealth(0.0);
-            }
-        }
-    }
-
-    public List<ImageView> getViews() {
-        return asteroidViews.stream().map(AsteroidView::getImageView).collect(Collectors.toList());
     }
 }

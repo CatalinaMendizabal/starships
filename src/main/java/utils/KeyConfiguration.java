@@ -9,13 +9,13 @@ public class KeyConfiguration {
 
     public void configKeys(Player[] players, Pane pane) {
         for (int i = 0; i < Config.PLAYERS; i++) {
-            players[i] = new Player(i, 0, Config.LIVES, Objects.requireNonNull(Config.getPlayerShips())[i],
-                    Config.PLAYER_KEYS[i][0],
-                    Config.PLAYER_KEYS[i][1],
-                    Config.PLAYER_KEYS[i][2],
-                    Config.PLAYER_KEYS[i][3],
-                    Config.PLAYER_KEYS[i][4],
-                    Config.PLAYER_KEYS[i][5], true);
+            players[i] = new Player(i, 0, Config.LIVES, Objects.requireNonNull(Config.getGameConfig())[i],
+                    Config.KEY_CODES[i][0],
+                    Config.KEY_CODES[i][1],
+                    Config.KEY_CODES[i][2],
+                    Config.KEY_CODES[i][3],
+                    Config.KEY_CODES[i][4],
+                    Config.KEY_CODES[i][5], true);
 
             pane.getChildren().add(players[i].getShipController().getShipView().getImageView());
             pane.getChildren().add(players[i].getShipController().getShipView().getHealthView());

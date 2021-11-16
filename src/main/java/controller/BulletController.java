@@ -50,7 +50,7 @@ public class BulletController {
         return result;
     }
 
-    public void updatePositions(Double secondsSinceLastFrame) {
+    public void updatePos(Double secondsSinceLastFrame) {
         for (int i = 0; i < bullets.size(); i++) {
             Bullet bullet = bullets.get(i);
             BulletView bulletView = bulletViews.get(i);
@@ -66,7 +66,7 @@ public class BulletController {
         return bullets;
     }
 
-    public List<ImageView> removeDeadBullets(double width, double height) {
+    public List<ImageView> deathControl(double width, double height) {
         List<ImageView> result = new ArrayList<>();
 
         for (int i = 0; i < bullets.size(); i++) {

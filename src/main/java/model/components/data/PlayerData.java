@@ -16,11 +16,11 @@ public class PlayerData implements Serializable {
     private int lives;
     private ShipControllerData shipController;
 
-    private KeyCode keyForward;
-    private KeyCode keyRotateLeft;
-    private KeyCode keyBackward;
-    private KeyCode keyRotateRight;
-    private KeyCode keyShoot;
+    private KeyCode forward;
+    private KeyCode left;
+    private KeyCode backward;
+    private KeyCode right;
+    private KeyCode shoot;
     private KeyCode changeShootingMode;
 
     private boolean isNormalShooting;
@@ -34,11 +34,11 @@ public class PlayerData implements Serializable {
                 .score(score)
                 .lives(lives)
                 .shipController(shipController)
-                .keyForward(keyForward)
-                .keyRotateLeft(keyRotateLeft)
-                .keyBackward(keyBackward)
-                .keyRotateRight(keyRotateRight)
-                .keyShoot(keyShoot)
+                .forward(forward)
+                .rotateLeft(left)
+                .backward(backward)
+                .rotateRight(right)
+                .shoot(shoot)
                 .changeShootingMode(changeShootingMode)
                 .isNormalShooting(isNormalShooting)
                 .build();

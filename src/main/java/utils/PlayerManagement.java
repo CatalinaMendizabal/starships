@@ -21,10 +21,10 @@ public class PlayerManagement {
     public void updatePosition(Double secondsSinceLastFrame, Player[] players, Pane pane, KeyTracker keyTracker, CollisionEngine collisionEngine, AsteroidController asteroidController) {
         for (Player player : players) {
             player.updateInput(pane, keyTracker, secondsSinceLastFrame);
-            player.getShipController().getBulletController().updatePositions(secondsSinceLastFrame);
+            player.getShipController().getBulletController().updatePos(secondsSinceLastFrame);
         }
 
-        asteroidController.updatePositions(secondsSinceLastFrame);
+        asteroidController.updatePos(secondsSinceLastFrame);
 
         List<Collisionable> colliders = new ArrayList<>(asteroidController.getAsteroids());
         for (Player player : players) {
@@ -36,10 +36,10 @@ public class PlayerManagement {
 
     public void updateDeaths(Player[] players, Pane pane, AsteroidController asteroidController) {
         for (Player player : players) {
-            pane.getChildren().remove(player.getShipController().updateDeath());
-            pane.getChildren().removeAll(player.getShipController().getBulletController().removeDeadBullets(pane.getWidth(), pane.getHeight()));
+            pane.getChildren().remove(player.getShipController().deathControl());
+            pane.getChildren().removeAll(player.getShipController().getBulletController().deathControl(pane.getWidth(), pane.getHeight()));
         }
-        asteroidController.killOutOfBounds(pane.getWidth(), pane.getHeight());
-        pane.getChildren().removeAll(asteroidController.updateDeaths());
+        asteroidController.removeAsteroids(pane.getWidth(), pane.getHeight());
+        pane.getChildren().removeAll(asteroidController.deathControl());
     }
 }

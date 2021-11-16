@@ -6,10 +6,12 @@ import model.components.Bullet;
 import model.components.Ship;
 
 public interface Collisionable extends Collider<Collisionable> {
+
+    void handleCollisionWith(Bullet bullet);
+
     void handleCollisionWith(Asteroid asteroid);
 
     void handleCollisionWith(Ship ship);
 
-    void handleCollisionWith(Bullet bullet);
 
 }

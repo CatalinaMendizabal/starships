@@ -10,10 +10,10 @@ import lombok.Data;
 public class AsteroidView {
     ImageView imageView;
 
-    public AsteroidView(Image image, double x, double y) {
+    public AsteroidView(Image image, double posX, double posY) {
         imageView = new ImageView(image);
-        imageView.setLayoutX(x);
-        imageView.setLayoutY(y);
+        imageView.setLayoutX(posX);
+        imageView.setLayoutY(posY);
         imageView.setRotate(Math.random() * 359);
     }
 

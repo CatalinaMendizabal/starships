@@ -23,19 +23,14 @@ public class Bullet implements Collisionable {
         this.shooter = shooter;
     }
 
-    @Override
-    public void handleCollisionWith(Collisionable collider) {collider.handleCollisionWith(this);} // double dispatch
-
     public void move(Vector2 to) {
         shape.setLayoutX(to.getX());
         shape.setLayoutY(to.getY());
     }
 
     @Override
-    public void handleCollisionWith(Asteroid asteroid) {
-        speed = 0;
-        if (asteroid.getHealth() < 0) shooter.addPoints(damage);
-        shooter.addPoints(damage);
+    public void handleCollisionWith(Collisionable collider) {
+        collider.handleCollisionWith(this);
     }
 
     @Override
@@ -44,6 +39,12 @@ public class Bullet implements Collisionable {
     @Override
     public void handleCollisionWith(Bullet bullet) {}
 
+    @Override
+    public void handleCollisionWith(Asteroid asteroid) {
+        speed = 0;
+        if (asteroid.getHealth() < 0) shooter.addPoints(damage);
+        shooter.addPoints(damage);
+    }
 
     public BulletData buildData() {
         return BulletData.builder()

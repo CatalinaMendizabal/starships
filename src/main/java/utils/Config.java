@@ -16,41 +16,20 @@ public class Config {
     public static final int PLAYERS = 2;
     public static final int LIVES = 3;
 
-    public static final KeyCode[][] PLAYER_KEYS = {
-            {KeyCode.W, KeyCode.A, KeyCode.S, KeyCode.D, KeyCode.SPACE, KeyCode.Q},
-            {KeyCode.UP, KeyCode.LEFT, KeyCode.DOWN, KeyCode.RIGHT, KeyCode.SHIFT, KeyCode.ENTER}
-    };
-
-    public static ShipController[] PLAYER_SHIPS;
-
-    static {
+    public static ShipController[] getGameConfig() {
         try {
-            PLAYER_SHIPS = new ShipController[]{
-                    new ShipController(new ShipView(imageLoader.loadFromResources("starship.png", 100, 100), 200, 200),
-                            new Ship(300.0, new SingleShooting(), new Rectangle(70, 45), 150),
-                            new BulletController()),
-                    new ShipController(new ShipView(imageLoader.loadFromResources("starship.png", 100, 100), 1000, 200),
-                            new Ship(300.0, new SingleShooting(), new Rectangle(70, 45), 150),
-                            new BulletController())
-            };
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static ShipController[] getPlayerShips() {
-        try {
-            return new ShipController[]{
-                    new ShipController(new ShipView(imageLoader.loadFromResources("starship.png", 100, 100), 200, 200),
-                            new Ship(200.0, new SingleShooting(), new Rectangle(70, 45), 100),
-                            new BulletController()),
-                    new ShipController(new ShipView(imageLoader.loadFromResources("starship.png", 100, 100), 1000, 200),
-                            new Ship(200.0, new SingleShooting(), new Rectangle(70, 45), 100),
-                            new BulletController())
+            return new ShipController[]{new ShipController(new ShipView(imageLoader.loadFromResources("starship.png", 100, 100), 200, 200), new Ship(200.0, new SingleShooting(), new Rectangle(70, 45), 100), new BulletController()),
+                    new ShipController(new ShipView(imageLoader.loadFromResources("starship.png", 100, 100), 1000, 200), new Ship(200.0, new SingleShooting(), new Rectangle(70, 45), 100), new BulletController())
             };
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
     }
+
+    public static final KeyCode[][] KEY_CODES = {
+            {KeyCode.W, KeyCode.A, KeyCode.S, KeyCode.D, KeyCode.SPACE, KeyCode.Q},
+            {KeyCode.UP, KeyCode.LEFT, KeyCode.DOWN, KeyCode.RIGHT, KeyCode.SHIFT, KeyCode.ENTER}
+    };
+
 }
