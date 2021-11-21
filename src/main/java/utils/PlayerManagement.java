@@ -12,6 +12,23 @@ import java.util.List;
 
 public class PlayerManagement {
 
+    public void updateDeathPlayers(Player[] players, Boolean[] deathPlayers) {
+        for (int i = 0; i < players.length; i++) {
+            if (players[i].getShipController().getShip().getHealth() <= 0)  deathPlayers[i] = true;
+        }
+    }
+
+    public boolean checkEndGame( Boolean[] deathPlayers) {
+        boolean status = true;
+        for (Boolean deathPlayer : deathPlayers) {
+            if (!deathPlayer) {
+                status = false;
+                break;
+            }
+        }
+        return status;
+    }
+
     public void updateHealths(Player[] players) {
         for (Player player : players) {
             if (player.getShipController().getShip().getHealth() > 0) player.getShipController().updateHealth();
