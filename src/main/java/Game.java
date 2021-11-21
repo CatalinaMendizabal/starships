@@ -7,6 +7,7 @@ import edu.austral.dissis.starships.file.ImageLoader;
 import edu.austral.dissis.starships.game.*;
 import factory.AsteroidFactory;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import lombok.NonNull;
@@ -67,8 +68,8 @@ class GameManager {
 
         introGameUI.getStart().setOnMouseClicked(event -> {
             try {
-               // rootSetter.setRoot(chooseShip(null));
-                 rootSetter.setRoot(loadGame(null));
+                rootSetter.setRoot(chooseShip(0, gameState));
+                //rootSetter.setRoot(loadGame(null));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -94,10 +95,26 @@ class GameManager {
         return pane;
     }
 
-    private Parent chooseShip(GameState gameState) throws IOException {
+    private Parent chooseShip(int player, GameState gameState) throws IOException {
         Pane pane = new Pane();
         ChooseShipUI chooseShipUI = new ChooseShipUI();
-        chooseShipUI.generateShipUI(pane);
+        Button next = chooseShipUI.getNextButton();
+        Button back = chooseShipUI.getBackButton();
+
+        next.setOnMouseClicked(event -> {
+            try {
+                if (player == ConfigurationReader.PLAYERS - 1) rootSetter.setRoot(loadGame(gameState));
+                else rootSetter.setRoot(chooseShip(player + 1, gameState));
+            } catch (IOException e) { e.printStackTrace();}
+        });
+
+        back.setOnMouseClicked(event -> {
+            try {
+                rootSetter.setRoot(loadIntro(gameState));
+            } catch (IOException e) { e.printStackTrace();}
+        });
+
+        chooseShipUI.generateShipUI(pane, player, rootSetter);
 
         return pane;
     }
@@ -108,9 +125,8 @@ class GameManager {
         LoadGameUI loadGameUI = new LoadGameUI();
         loadGameUI.generateGameUI(pane);
 
-        Player [] players;
+        Player[] players;
         AsteroidController asteroidController;
-        //KeyConfiguration keyConfiguration = new KeyConfiguration();
         ConfigurationReader cr = new ConfigurationReader();
 
 

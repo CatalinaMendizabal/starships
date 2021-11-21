@@ -1,12 +1,8 @@
 package utils;
 
-import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.*;
-import java.util.regex.Pattern;
-
 import controller.BulletController;
 import controller.ShipController;
 import edu.austral.dissis.starships.file.ImageLoader;
@@ -23,11 +19,16 @@ import view.ShipView;
 
 public class ConfigurationReader {
 
+    public static final int PLAYERS = 2;
     private static final String FILENAME = "/Users/catamendizabal/projects/dis-sis/starships/starships.json";
-    Player[] players = new Player[2];
+    Player[] players = new Player[PLAYERS];
     JSONParser parser = new JSONParser();
     List<JSONObject> list = new ArrayList<>();
     private static final ImageLoader imageLoader = new ImageLoader();
+    public static final String[] SHIP_NAMES = {"starship.png", "starship.png"};
+    public static void setShip(int i, String shipName) {
+        SHIP_NAMES[i] = shipName;
+    }
 
     public ConfigurationReader() {
         try  {
@@ -75,8 +76,8 @@ public class ConfigurationReader {
     public static ShipController[] getGameConfig() {
         try {
             return new ShipController[]{
-                    new ShipController(new ShipView(imageLoader.loadFromResources("starship.png", 100, 100), 200, 200), new Ship(200.0, new SingleShooting(), new Rectangle(70, 45), 100), new BulletController()),
-                    new ShipController(new ShipView(imageLoader.loadFromResources("starship.png", 100, 100), 1000, 200), new Ship(200.0, new SingleShooting(), new Rectangle(70, 45), 100), new BulletController())
+                    new ShipController(new ShipView(imageLoader.loadFromResources(SHIP_NAMES[0], 100, 100), 200, 200), new Ship(200.0, new SingleShooting(), new Rectangle(70, 45), 100), new BulletController()),
+                    new ShipController(new ShipView(imageLoader.loadFromResources(SHIP_NAMES[1], 100, 100), 1000, 200), new Ship(200.0, new SingleShooting(), new Rectangle(70, 45), 100), new BulletController())
             };
         } catch (IOException e) {
             e.printStackTrace();
