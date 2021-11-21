@@ -26,9 +26,7 @@ public class Ship implements Collisionable {
     }
 
     @Override
-    public void handleCollisionWith(Collisionable collider) {
-        collider.handleCollisionWith(this);
-    }
+    public void handleCollisionWith(Collisionable collider) {collider.handleCollisionWith(this);}
 
     public void move(Vector2 to) {
         shape.setLayoutX(to.getX() + (100 - ((Rectangle) shape).getWidth()) / 2);

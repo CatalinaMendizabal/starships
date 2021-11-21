@@ -79,11 +79,11 @@ public class AsteroidController {
         return deaths;
     }
 
-    public void updatePos(Double secondsSinceLastFrame) {
+    public void updatePos(Double lastFrame) {
         for (int i = 0; i < asteroids.size(); i++) {
             Asteroid a = asteroids.get(i);
             AsteroidView v = asteroidViews.get(i);
-            Vector2 movementVector = Vector2.vectorFromModule((a.getSpeed() * secondsSinceLastFrame), (Math.toRadians(v.getRotate())));
+            Vector2 movementVector = Vector2.vectorFromModule((a.getSpeed() * lastFrame), (Math.toRadians(v.getRotate())));
             Vector2 from = Vector2.vector(v.getLayoutX(), v.getLayoutY());
             Vector2 to = from.add(movementVector);
             v.getImageView().setFitWidth(a.getHealth());

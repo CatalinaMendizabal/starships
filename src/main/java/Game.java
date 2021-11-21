@@ -1,3 +1,4 @@
+import UI.ChooseShipUI;
 import UI.IntroGameUI;
 import UI.LoadGameUI;
 import controller.AsteroidController;
@@ -13,12 +14,10 @@ import lombok.Setter;
 import model.components.data.AsteroidData;
 import model.Player;
 import model.components.data.PlayerData;
-import utils.Config;
+import utils.*;
 import model.serializer.GameSerializer;
 import model.serializer.GameState;
-import utils.KeyConfiguration;
-import utils.PlayerManagement;
-import utils.SpawnAsteroids;
+
 import java.io.IOException;
 import java.util.stream.Collectors;
 
@@ -61,13 +60,15 @@ class GameManager {
 
     private Parent loadIntro(GameState gameState) throws IOException {
         Pane pane = new Pane();
+
         pane.setPrefSize(1920, 1080);
 
         IntroGameUI introGameUI = new IntroGameUI();
 
         introGameUI.getStart().setOnMouseClicked(event -> {
             try {
-                rootSetter.setRoot(loadGame(null));
+               // rootSetter.setRoot(chooseShip(null));
+                 rootSetter.setRoot(loadGame(null));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -93,6 +94,14 @@ class GameManager {
         return pane;
     }
 
+    private Parent chooseShip(GameState gameState) throws IOException {
+        Pane pane = new Pane();
+        ChooseShipUI chooseShipUI = new ChooseShipUI();
+        chooseShipUI.generateShipUI(pane);
+
+        return pane;
+    }
+
     private Parent loadGame(GameState gameState) throws IOException {
 
         Pane pane = new Pane();
@@ -101,15 +110,17 @@ class GameManager {
 
         Player [] players;
         AsteroidController asteroidController;
-        KeyConfiguration keyConfiguration = new KeyConfiguration();
+        //KeyConfiguration keyConfiguration = new KeyConfiguration();
+        ConfigurationReader cr = new ConfigurationReader();
+
 
         if (gameState == null) {
-            players = new Player[Config.PLAYERS];
-            keyConfiguration.configKeys(players, pane);
+            players = cr.getPlayers();
+            cr.configKeys(pane);
             asteroidController = new AsteroidController();
         } else {
             players = gameState.getPlayers().stream().map(PlayerData::toPlayer).toArray(Player[]::new);
-            keyConfiguration.configSaveGameKeys(players, pane);
+            cr.configSaveGameKeys(players, pane);
             asteroidController = new AsteroidController(gameState.getAsteroids().stream().map(AsteroidData::toAsteroid).collect(Collectors.toList()));
             pane.getChildren().addAll(asteroidController.getViews());
         }

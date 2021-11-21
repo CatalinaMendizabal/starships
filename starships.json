@@ -1,0 +1,22 @@
+{
+  "Player1": {
+    "id": 0,
+    "moveUp": "W",
+    "moveDown": "S",
+    "moveLeft": "A",
+    "moveRight": "D",
+    "fire": "Space",
+    "changeFire": "Tab",
+    "lives": 3
+  },
+  "Player2": {
+    "id": 1,
+    "moveUp": "Up",
+    "moveDown": "Down",
+    "moveLeft": "Left",
+    "moveRight": "Right",
+    "fire": "Shift",
+    "changeFire": "Enter",
+    "lives": 3
+  }
+}

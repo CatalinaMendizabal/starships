@@ -22,8 +22,8 @@ public class Player implements Serializable {
     private ShipController shipController;
 
     public KeyCode forward;
-    public KeyCode rotateLeft;
     public KeyCode backward;
+    public KeyCode rotateLeft;
     public KeyCode rotateRight;
     public KeyCode shoot;
     public KeyCode changeShootingMode;
