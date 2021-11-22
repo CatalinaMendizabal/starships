@@ -11,7 +11,7 @@ import model.weapon.SingleShooting;
 import java.util.List;
 
 
-public class Ship extends GameObject implements Collisionable {
+public class Ship extends GameObject {
 
     private Shooting shootingStrategy;
 
@@ -19,7 +19,6 @@ public class Ship extends GameObject implements Collisionable {
         super(health, shape, speed);
         this.shootingStrategy = new SingleShooting();
     }
-
 
     public List<Bullet> fire(Player shooter) {
         return shootingStrategy.shoot(shooter, shape.getLayoutX() + ((Rectangle) shape).getWidth()/2 , shape.getLayoutY() + ((Rectangle) shape).getHeight()/2, shape.getRotate());

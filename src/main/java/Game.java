@@ -105,7 +105,7 @@ class GameManager {
 
         next.setOnMouseClicked(event -> {
             try {
-                if (player == ConfigurationReader.PLAYERS - 1) rootSetter.setRoot(loadGame(gameState));
+                if (player == ConfigurationReader.PLAYERS - 1) rootSetter.setRoot(loadGame(null));
                 else rootSetter.setRoot(chooseShip(player + 1, gameState));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -206,7 +206,6 @@ class MainTimer extends GameTimer {
         this.asteroidController = asteroidController;
         deathPlayer = new Boolean[players.length];
         Arrays.fill(deathPlayer, false);
-        gameOverUI = new GameOverUI(players);
     }
 
     @SneakyThrows
@@ -217,6 +216,7 @@ class MainTimer extends GameTimer {
             paused = false;
         } else if (endGame) {
             stop();
+            gameOverUI = new GameOverUI(players);
             gameOverUI.display(rootSetter, pane);
         }
 

@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import model.components.data.AsteroidData;
 
-public class Asteroid extends GameObject implements Collisionable {
+public class Asteroid extends GameObject {
 
     public Asteroid(Double health, Shape shape, double speed) {super(health, shape, speed);}
 
@@ -27,7 +27,6 @@ public class Asteroid extends GameObject implements Collisionable {
 
     public void setHealth(Double health) {this.health = health;}
 
-
     @Override
     public Shape getShape() {return shape;}
 
@@ -40,7 +39,7 @@ public class Asteroid extends GameObject implements Collisionable {
     @Override
     public void handleCollisionWith(Ship ship) {
         ship.setHealth(ship.getHealth() - health / 2);
-        health = 0.0;
+        this.setHealth(0.0);
     }
 
     @Override
