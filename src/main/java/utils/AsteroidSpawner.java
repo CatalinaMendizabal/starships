@@ -7,7 +7,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import model.components.Asteroid;
 
-public class SpawnAsteroids {
+public class AsteroidSpawner {
 
     public void spawnAsteroid(AsteroidFactory asteroidFactory ,AsteroidController asteroidController, ImageLoader imageLoader, Pane pane){
         if (Math.random() * 100.0 < 5) {

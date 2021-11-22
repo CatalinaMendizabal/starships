@@ -136,18 +136,19 @@ class GameManager {
         ConfigurationReader cr = new ConfigurationReader();
 
 
-        if (gameState == null) {
+         if (gameState == null) {
             players = cr.getPlayers();
             cr.configKeys(pane);
             asteroidController = new AsteroidController();
         } else {
-            players = gameState.getPlayers().stream().map(PlayerData::toPlayer).toArray(Player[]::new);
+           players = gameState.getPlayers().stream().map(PlayerData::toPlayer).toArray(Player[]::new);
             cr.configSaveGameKeys(players, pane);
             asteroidController = new AsteroidController(gameState.getAsteroids().stream().map(AsteroidData::toAsteroid).collect(Collectors.toList()));
             pane.getChildren().addAll(asteroidController.getViews());
         }
 
         setTimerConfiguration(loadGameUI.getImageLoader(), pane, players, asteroidController);
+
 
         pane.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.P) {
@@ -187,7 +188,7 @@ class MainTimer extends GameTimer {
     Pane pane;
     AsteroidFactory asteroidFactory = new AsteroidFactory();
     CollisionEngine collisionEngine = new CollisionEngine();
-    SpawnAsteroids spawnAsteroids = new SpawnAsteroids();
+    AsteroidSpawner spawnAsteroids = new AsteroidSpawner();
     PlayerManagement playerManagement = new PlayerManagement();
     GameOverUI gameOverUI;
     RootSetter rootSetter;
