@@ -146,6 +146,8 @@ class GameManager {
             pane.getChildren().addAll(asteroidController.getViews());
         }
 
+        for (Player player : players) {player.updateShipStyle(ConfigurationReader.SHIP_NAMES[player.getId()]);}
+
         setTimerConfiguration(loadGameUI.getImageLoader(), pane, players, asteroidController);
 
 
@@ -156,7 +158,6 @@ class GameManager {
                     mainTimer.stop();
                     mainTimer.setPaused(true);
                     rootSetter.setRoot(loadIntro(new GameState(players, asteroidController.getAsteroids())));
-                    // rootSetter.setRoot(loadIntro(null));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

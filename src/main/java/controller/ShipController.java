@@ -1,6 +1,4 @@
 package controller;
-
-import edu.austral.dissis.starships.file.ImageLoader;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import lombok.AllArgsConstructor;
@@ -17,6 +15,7 @@ import java.io.Serializable;
 @Getter
 @Builder
 public class ShipController implements Serializable {
+
     private final MovementController movementController = new MovementController(this);
     private ShipView shipView;
     private Ship ship;
@@ -34,6 +33,8 @@ public class ShipController implements Serializable {
 
     public void rotateRight(Double lastFrame) {movementController.rotateRight(lastFrame);}
 
+    public void updateShipStyle(String shipName) {shipView.updateShipStyle(shipName);}
+
     public ImageView deathControl() {
         if (ship.getHealth() <= 0) {
             shipView.getHealthView().setVisible(false);
@@ -44,7 +45,6 @@ public class ShipController implements Serializable {
 
     public ShipControllerData buildData() {
         return ShipControllerData.builder()
-                .imageName("starship.png")
                 .ship(ship.buildData())
                 .bulletController(bulletController.buildData())
                 .build();

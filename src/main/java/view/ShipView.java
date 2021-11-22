@@ -1,5 +1,6 @@
 package view;
 
+import edu.austral.dissis.starships.file.ImageLoader;
 import edu.austral.dissis.starships.vector.Vector2;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
@@ -10,6 +11,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import lombok.Data;
+import lombok.SneakyThrows;
 
 @Data
 public class ShipView {
@@ -64,6 +66,12 @@ public class ShipView {
 
     public void setRotate(double v) {
         imageView.setRotate(v);
+    }
+
+    @SneakyThrows
+    public void updateShipStyle(String name) {
+        ImageLoader imageLoader = new ImageLoader();
+        imageView.setImage(imageLoader.loadFromResources(name, 100, 100));
     }
 
     public void move(Vector2 to) {

@@ -16,6 +16,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Builder
 public class Player implements Serializable, BulletManager {
+
     private final PlayerInput playerInput = new PlayerInput(this);
     private int id;
     private int score;
@@ -62,5 +63,6 @@ public class Player implements Serializable, BulletManager {
                 .build();
     }
 
+    public void updateShipStyle(String shipName) {shipController.updateShipStyle(shipName);}
 
 }

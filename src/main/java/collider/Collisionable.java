@@ -13,5 +13,4 @@ public interface Collisionable extends Collider<Collisionable> {
 
     void handleCollisionWith(Ship ship);
 
-
 }
