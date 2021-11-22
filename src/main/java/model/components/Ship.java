@@ -8,10 +8,11 @@ import model.Player;
 import model.components.data.ShipData;
 import model.weapon.Shooting;
 import model.weapon.SingleShooting;
+
 import java.util.List;
 
 
-public class Ship extends GameObject implements Collisionable{
+public class Ship extends GameObject implements Collisionable {
 
     private Shooting shootingStrategy;
 
@@ -21,7 +22,8 @@ public class Ship extends GameObject implements Collisionable{
     }
 
     public List<Bullet> fire(Player shooter) {
-        return shootingStrategy.shoot(shooter, shape.getLayoutX() + ((Rectangle) shape).getWidth()/2 , shape.getLayoutY() + ((Rectangle) shape).getHeight()/2, shape.getRotate());
+        return shootingStrategy.shoot(shooter, shape.getLayoutX() + ((Rectangle) shape).getWidth() / 2, shape.getLayoutY() + ((Rectangle) shape).getHeight() / 2, shape.getRotate());
+        //return shootingStrategy.shoot(position.getX() + 50 , position.getY() + 50, 0);
     }
 
     @Override
@@ -34,16 +36,21 @@ public class Ship extends GameObject implements Collisionable{
 
     @Override
     public void handleCollisionWith(Bullet bullet) {
-        if (!bullet.getBulletManager().shipBullet(this) || bullet.getBulletManager() == null) {
+        if (bullet.getBulletManager() == null || !bullet.getBulletManager().shipBullet(this)) {
             health -= bullet.getDamage() / 10;
             bullet.setSpeed(0);
-            if (health < 0) bullet.getBulletManager().addPoints(bullet.getDamage());
-            bullet.getBulletManager().addPoints(bullet.getDamage() / 10);
+            if (bullet.getBulletManager() != null) {
+                if (health < 0) bullet.getBulletManager().addPoints(bullet.getDamage());
+                bullet.getBulletManager().addPoints(bullet.getDamage() / 10);
+            }
         }
     }
 
     @Override
-    public void handleCollisionWith(Asteroid asteroid) {}
+    public void handleCollisionWith(Asteroid asteroid) {
+        health -= asteroid.getHealth() / 2;
+        asteroid.setHealth(0.0);
+    }
 
     @Override
     public void handleCollisionWith(Ship ship) {}
@@ -54,7 +61,9 @@ public class Ship extends GameObject implements Collisionable{
         this.health = health;
     }
 
-    public void setShootingStrategy(Shooting shootingStrategy) {this.shootingStrategy = shootingStrategy;}
+    public void setShootingStrategy(Shooting shootingStrategy) {
+        this.shootingStrategy = shootingStrategy;
+    }
 
     public void setShape(Shape shape) {this.shape = shape;}
 

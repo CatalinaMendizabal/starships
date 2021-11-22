@@ -39,8 +39,9 @@ public class Asteroid extends GameObject implements Collisionable{
     @Override
     public void handleCollisionWith(Ship ship) {
         ship.setHealth(ship.getHealth() - health / 2);
-        this.setHealth(0.0);
+        setHealth(0.0);
     }
+
 
     @Override
     public void handleCollisionWith(Bullet bullet) {health = health - bullet.getDamage();}

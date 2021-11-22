@@ -1,5 +1,5 @@
 package model.components;
-import collider.Collisionable;
+import edu.austral.dissis.starships.vector.Vector2;
 import javafx.scene.shape.Shape;
 
 public abstract class GameObject {
@@ -17,8 +17,6 @@ public abstract class GameObject {
     }
 
     public Shape getShape() {return shape;}
-
-
 
     public void setShape(Shape shape) {this.shape = shape;}
 
