@@ -5,6 +5,7 @@ import edu.austral.dissis.starships.file.ImageLoader;
 import lombok.Builder;
 import lombok.Data;
 import lombok.SneakyThrows;
+import model.components.Ship;
 import view.ShipView;
 
 import java.io.Serializable;
@@ -13,17 +14,17 @@ import java.io.Serializable;
 @Builder
 public class ShipControllerData implements Serializable {
     private String imageName;
-    private ShipData ship;
+    private Ship ship;
     private BulletControllerData bulletController;
 
     @SneakyThrows
     public ShipController toShipController() {
         ImageLoader imageLoader = new ImageLoader();
-        ShipView shipView = new ShipView(imageLoader.loadFromResources(imageName, 100, 100), (int) ship.getPosX(), (int) ship.getPosY());
-        shipView.getImageView().setRotate(ship.getAngle());
+        ShipView shipView = new ShipView(imageLoader.loadFromResources(imageName, 100, 100), 100, 100);
+        shipView.getImageView().setRotate(ship.getDirectionAngle());
         return ShipController.builder()
                 .shipView(shipView)
-                .ship(ship.toShip())
+                .ship(ship)
                 .bulletController(bulletController.toBulletController())
                 .build();
     }

@@ -1,3 +1,4 @@
+/*
 package model.components.data;
 
 import javafx.scene.shape.Rectangle;
@@ -16,23 +17,30 @@ import java.util.TimerTask;
 @Builder
 public class ShipData implements Serializable {
     private double health;
-    private double posX;
-    private double posY;
+    private Shape shape;
     private double speed;
-    private double angle;
-    private Shooting shootingStrategy;
+    private float angle;
+    private Shooting shooting;
 
     public Ship toShip() {
-        Shape shape = new Rectangle(70, 45);
-        shape.setLayoutX(posX);
-        shape.setLayoutY(posY);
-        shape.setRotate(angle);
+
+        */
+/*
+         .health(health)
+                .shape(shape)
+                .shooting(shooting)
+                .speed(speed)
+                .posX(shape.getLayoutX())
+                .posY(shape.getLayoutY())
+                .angle(shape.getRotate())
+         *//*
 
         Ship ship = Ship.builder()
                 .health(health)
                 .shape(shape)
                 .speed(speed)
-                .shootingStrategy(shootingStrategy)
+                .directionAngle(angle)
+                .shooting(shooting)
                 .build();
 
         new Timer().schedule(new TimerTask() {
@@ -45,3 +53,4 @@ public class ShipData implements Serializable {
         return ship;
     }
 }
+*/

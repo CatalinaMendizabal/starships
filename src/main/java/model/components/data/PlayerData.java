@@ -43,7 +43,7 @@ public class PlayerData implements Serializable {
                 .isNormalShooting(isNormalShooting)
                 .build();
 
-        shipController.getBulletController().getBullets().forEach(bullet -> bullet.setShooter(player));
+        shipController.getBulletController().getBullets().forEach(bullet -> bullet.setBulletManager(player));
         return player;
     }
 }

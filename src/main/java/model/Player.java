@@ -7,6 +7,7 @@ import javafx.scene.layout.Pane;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import model.components.Ship;
 import model.components.data.PlayerData;
 
 import java.io.Serializable;
@@ -14,7 +15,7 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @Builder
-public class Player implements Serializable {
+public class Player implements Serializable, BulletManager {
     private final PlayerInput playerInput = new PlayerInput(this);
     private int id;
     private int score;
@@ -32,28 +33,24 @@ public class Player implements Serializable {
 
     public void updateInput(Pane pane, KeyTracker keyTracker, double secondsSinceLastFrame) {playerInput.updateInput(pane, keyTracker, secondsSinceLastFrame);}
 
-    public PlayerData buildData() {
-        return PlayerData.builder()
-                .id(id)
-                .score(score)
-                .lives(lives)
-                .shipController(shipController.buildData())
-                .forward(forward)
-                .left(rotateLeft)
-                .backward(backward)
-                .right(rotateRight)
-                .shoot(shoot)
-                .changeShootingMode(changeShootingMode)
-                .isNormalShooting(isNormalShooting)
-                .build();
-    }
 
+   /* public void addPoints(double points) {
+        score += points;
+        updatePoints();
+    }*/
+
+    @Override
     public void addPoints(double points) {
         score += points;
         updatePoints();
     }
 
+    @Override
+    public boolean shipBullet(Ship ship) {return ship.equals(shipController.getShip());}
+
     public void updatePoints() {
         shipController.getShipView().updatePoints(score);
     }
+
+
 }

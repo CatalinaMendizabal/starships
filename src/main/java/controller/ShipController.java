@@ -1,5 +1,6 @@
 package controller;
 
+import edu.austral.dissis.starships.file.ImageLoader;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import lombok.AllArgsConstructor;
@@ -21,7 +22,7 @@ public class ShipController implements Serializable {
     private Ship ship;
     private BulletController bulletController;
 
-    public void fire(Player shooter) {ship.fire(bulletController, shooter);}
+    public void fire(Player shooter) {ship.fire(shooter).forEach(bulletController::addBullet);}
 
     public void updateHealth() {shipView.updateHealth(ship.getHealth());}
 
@@ -39,13 +40,5 @@ public class ShipController implements Serializable {
             shipView.getScore().setVisible(false);
             return shipView.getImageView();
         } else return null;
-    }
-
-      public ShipControllerData buildData() {
-        return ShipControllerData.builder()
-                .imageName("starship.png")
-                .ship(ship.buildData())
-                .bulletController(bulletController.buildData())
-                .build();
     }
 }

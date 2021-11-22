@@ -3,18 +3,17 @@ package model.components;
 import collider.Collisionable;
 import edu.austral.dissis.starships.vector.Vector2;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Shape;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import model.components.data.AsteroidData;
 
-@AllArgsConstructor
-@Data
-public class Asteroid implements Collisionable {
+public class Asteroid extends GameObject {
 
-    Double health;
-    Shape shape;
-    double speed;
+    private final double size;
+
+    public Asteroid(Vector2 position, Vector2 direction, double speed, double health, double size) {
+        super(position, direction, speed, health);
+        this.size = size;
+        this.shape = new Circle(health / 3);
+    }
 
     public void move(Vector2 to) {
         ((Circle) shape).setCenterX(to.getX() + health / 2);
@@ -22,13 +21,10 @@ public class Asteroid implements Collisionable {
     }
 
     @Override
-    public void handleCollisionWith(Collisionable collider) {
-        collider.handleCollisionWith(this);
-    }
+    public void handleCollisionWith(Collisionable collider) {collider.handleCollisionWith(this);}
 
     @Override
-    public void handleCollisionWith(Asteroid asteroid) {
-    }
+    public void handleCollisionWith(Asteroid asteroid) {}
 
     @Override
     public void handleCollisionWith(Ship ship) {
@@ -44,6 +40,8 @@ public class Asteroid implements Collisionable {
     public AsteroidData buildData() {
         return AsteroidData.builder()
                 .health(health)
+                .position(position)
+                .direction(direction)
                 .centerX(((Circle) shape).getCenterX())
                 .centerY(((Circle) shape).getCenterY())
                 .rotate(shape.getRotate())

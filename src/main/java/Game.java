@@ -131,17 +131,16 @@ class GameManager {
         LoadGameUI loadGameUI = new LoadGameUI();
         loadGameUI.generateGameUI(pane);
 
+        ConfigurationReader cr = new ConfigurationReader();
         Player[] players;
         AsteroidController asteroidController;
-        ConfigurationReader cr = new ConfigurationReader();
 
-
-         if (gameState == null) {
+        if (gameState == null) {
             players = cr.getPlayers();
             cr.configKeys(pane);
             asteroidController = new AsteroidController();
         } else {
-           players = gameState.getPlayers().stream().map(PlayerData::toPlayer).toArray(Player[]::new);
+            players = gameState.getPlayers().stream().map(PlayerData::toPlayer).toArray(Player[]::new);
             cr.configSaveGameKeys(players, pane);
             asteroidController = new AsteroidController(gameState.getAsteroids().stream().map(AsteroidData::toAsteroid).collect(Collectors.toList()));
             pane.getChildren().addAll(asteroidController.getViews());
@@ -157,6 +156,7 @@ class GameManager {
                     mainTimer.stop();
                     mainTimer.setPaused(true);
                     rootSetter.setRoot(loadIntro(new GameState(players, asteroidController.getAsteroids())));
+                    // rootSetter.setRoot(loadIntro(null));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
