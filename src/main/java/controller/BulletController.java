@@ -13,6 +13,7 @@ import view.BulletView;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class BulletController implements Serializable {
     List<Bullet> bullets = new ArrayList<>();
@@ -86,5 +87,11 @@ public class BulletController implements Serializable {
             }
         }
         return result;
+    }
+
+    public BulletControllerData buildData() {
+        return BulletControllerData.builder()
+                .bullets(bullets.stream().map(Bullet::buildData).collect(Collectors.toList()))
+                .build();
     }
 }

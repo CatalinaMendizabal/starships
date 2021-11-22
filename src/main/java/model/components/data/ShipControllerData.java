@@ -14,17 +14,17 @@ import java.io.Serializable;
 @Builder
 public class ShipControllerData implements Serializable {
     private String imageName;
-    private Ship ship;
+    private ShipData ship;
     private BulletControllerData bulletController;
 
     @SneakyThrows
     public ShipController toShipController() {
         ImageLoader imageLoader = new ImageLoader();
-        ShipView shipView = new ShipView(imageLoader.loadFromResources(imageName, 100, 100), 100, 100);
-        shipView.getImageView().setRotate(ship.getDirectionAngle());
+        ShipView shipView = new ShipView(imageLoader.loadFromResources(imageName, 100, 100), (int) ship.getPosX(), (int) ship.getPosY());
+        shipView.getImageView().setRotate(ship.getAngle());
         return ShipController.builder()
                 .shipView(shipView)
-                .ship(ship)
+                .ship(ship.toShip())
                 .bulletController(bulletController.toBulletController())
                 .build();
     }

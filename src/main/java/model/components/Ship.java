@@ -5,26 +5,24 @@ import edu.austral.dissis.starships.vector.Vector2;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import model.Player;
-
+import model.components.data.ShipData;
 import model.weapon.Shooting;
 import model.weapon.SingleShooting;
-
-import java.io.Serializable;
 import java.util.List;
 
 
-public class Ship extends GameObject implements Serializable {
+public class Ship extends GameObject implements Collisionable {
 
-    private Shooting shooting;
+    private Shooting shootingStrategy;
 
-    public Ship(Vector2 position, Vector2 direction, double speed, double health) {
-        super(position, direction, speed, health);
-        this.shooting = new SingleShooting();
-        this.shape = new Rectangle(70, 45);
+    public Ship(Double health, Shape shape, double speed) {
+        super(health, shape, speed);
+        this.shootingStrategy = new SingleShooting();
     }
 
+
     public List<Bullet> fire(Player shooter) {
-        return shooting.shoot(shooter, shape.getLayoutX() + ((Rectangle) shape).getWidth()/2 , shape.getLayoutY() + ((Rectangle) shape).getHeight()/2, shape.getRotate());
+        return shootingStrategy.shoot(shooter, shape.getLayoutX() + ((Rectangle) shape).getWidth()/2 , shape.getLayoutY() + ((Rectangle) shape).getHeight()/2, shape.getRotate());
     }
 
     @Override
@@ -36,23 +34,8 @@ public class Ship extends GameObject implements Serializable {
     }
 
     @Override
-    public void handleCollisionWith(Asteroid asteroid) {}
-
-    @Override
-    public void handleCollisionWith(Ship ship) {}
-
-
-    public void setShootingStrategy(Shooting shootingStrategy) {
-        this.shooting = shootingStrategy;
-    }
-
-    public void setShape(Shape shape) {
-        this.shape = shape;
-    }
-
-    @Override
     public void handleCollisionWith(Bullet bullet) {
-        if (!bullet.getBulletManager().shipBullet(this) && bullet.getBulletManager() == null) {
+        if (!bullet.getBulletManager().shipBullet(this) || bullet.getBulletManager() == null) {
             health -= bullet.getDamage() / 10;
             bullet.setSpeed(0);
             if (health < 0) bullet.getBulletManager().addPoints(bullet.getDamage());
@@ -60,4 +43,31 @@ public class Ship extends GameObject implements Serializable {
         }
     }
 
+    @Override
+    public void handleCollisionWith(Asteroid asteroid) {}
+
+    @Override
+    public void handleCollisionWith(Ship ship) {}
+
+    public double getHealth() {return health;}
+
+    public void setHealth(Double health) {
+        this.health = health;
+    }
+
+    public void setShootingStrategy(Shooting shootingStrategy) {this.shootingStrategy = shootingStrategy;}
+
+    public void setShape(Shape shape) {this.shape = shape;}
+
+
+    public ShipData buildData() {
+        return ShipData.builder()
+                .health(health)
+                .shootingStrategy(shootingStrategy)
+                .speed(speed)
+                .posX(shape.getLayoutX())
+                .posY(shape.getLayoutY())
+                .angle(shape.getRotate())
+                .build();
+    }
 }

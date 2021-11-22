@@ -9,6 +9,7 @@ import edu.austral.dissis.starships.file.ImageLoader;
 import edu.austral.dissis.starships.vector.Vector2;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Rectangle;
 import model.Player;
 import model.components.Ship;
 import org.json.simple.JSONObject;
@@ -75,8 +76,8 @@ public class ConfigurationReader {
     public static ShipController[] getGameConfig() {
         try {
             return new ShipController[]{
-                    new ShipController(new ShipView(imageLoader.loadFromResources(SHIP_NAMES[0], 100, 100), 200, 200), new Ship(Vector2.vector(200, 100), Vector2.vector(0, -1),200.0, 200), new BulletController()),
-                    new ShipController(new ShipView(imageLoader.loadFromResources(SHIP_NAMES[1], 100, 100), 1000, 200), new Ship(Vector2.vector(200, 100), Vector2.vector(0, -1), 200.0, 200), new BulletController())
+                    new ShipController(new ShipView(imageLoader.loadFromResources(SHIP_NAMES[0], 100, 100), 200, 200), new Ship(200.0, new Rectangle(70, 45), 200), new BulletController()),
+                    new ShipController(new ShipView(imageLoader.loadFromResources(SHIP_NAMES[1], 100, 100), 1000, 200), new Ship( 200.0, new Rectangle(70, 45), 200), new BulletController())
             };
         } catch (IOException e) {
             e.printStackTrace();

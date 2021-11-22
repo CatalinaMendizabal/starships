@@ -48,9 +48,7 @@ public class ShipView {
 
     public void updateHealth(Double health) {healthFill.setWidth(health * 2.5);}
 
-    public void updatePoints(int points) {
-        this.score.setText(String.valueOf(points));
-    }
+    public void updatePoints(int points) {this.score.setText(String.valueOf(points));}
 
     public double getLayoutX() {
         return imageView.getLayoutX();

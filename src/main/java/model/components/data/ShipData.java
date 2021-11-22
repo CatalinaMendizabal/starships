@@ -1,10 +1,11 @@
-/*
 package model.components.data;
 
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import lombok.Builder;
 import lombok.Data;
+import model.components.Asteroid;
 import model.components.Ship;
 import model.weapon.Shooting;
 import model.weapon.SingleShooting;
@@ -16,41 +17,28 @@ import java.util.TimerTask;
 @Data
 @Builder
 public class ShipData implements Serializable {
+
     private double health;
-    private Shape shape;
+    private Shooting shootingStrategy;
     private double speed;
-    private float angle;
-    private Shooting shooting;
+    private double posX;
+    private double posY;
+    private double angle;
 
     public Ship toShip() {
+        Shape shape = new Rectangle(70, 45);
+        shape.setRotate(angle);
+        shape.setTranslateX(posX);
+        shape.setTranslateY(posY);
+        shape.setLayoutX(posX);
+        shape.setLayoutY(posY);
 
-        */
-/*
-         .health(health)
-                .shape(shape)
-                .shooting(shooting)
-                .speed(speed)
-                .posX(shape.getLayoutX())
-                .posY(shape.getLayoutY())
-                .angle(shape.getRotate())
-         *//*
-
-        Ship ship = Ship.builder()
-                .health(health)
-                .shape(shape)
-                .speed(speed)
-                .directionAngle(angle)
-                .shooting(shooting)
-                .build();
-
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                ship.setShootingStrategy(new SingleShooting());
-            }
-        } , 5000);
+        Ship ship = new Ship(health, shape, speed);
+        ship.setShootingStrategy(shootingStrategy);
+        ship.setHealth(health);
+        ship.setSpeed(speed);
+        ship.setShape(shape);
 
         return ship;
     }
 }
-*/

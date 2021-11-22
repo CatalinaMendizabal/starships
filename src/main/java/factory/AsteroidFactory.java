@@ -1,6 +1,7 @@
 package factory;
 
 import edu.austral.dissis.starships.vector.Vector2;
+import javafx.scene.shape.Circle;
 import model.components.Asteroid;
 
 import java.util.Random;
@@ -12,6 +13,6 @@ public class AsteroidFactory {
     public Asteroid createAsteroid(int seed) {
         Random random = new Random(seed);
         double health = random.nextInt(300 - 25) + 25.0;
-        return new Asteroid(Vector2.vector(9,10), Vector2.vector(9,10), 1/health * 10000,  health, health);
+        return new Asteroid(health, new Circle(health/3), 1/health * 10000);
     }
 }

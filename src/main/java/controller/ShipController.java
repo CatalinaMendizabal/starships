@@ -41,4 +41,12 @@ public class ShipController implements Serializable {
             return shipView.getImageView();
         } else return null;
     }
+
+    public ShipControllerData buildData() {
+        return ShipControllerData.builder()
+                .imageName("starship.png")
+                .ship(ship.buildData())
+                .bulletController(bulletController.buildData())
+                .build();
+    }
 }

@@ -33,12 +33,6 @@ public class Player implements Serializable, BulletManager {
 
     public void updateInput(Pane pane, KeyTracker keyTracker, double secondsSinceLastFrame) {playerInput.updateInput(pane, keyTracker, secondsSinceLastFrame);}
 
-
-   /* public void addPoints(double points) {
-        score += points;
-        updatePoints();
-    }*/
-
     @Override
     public void addPoints(double points) {
         score += points;
@@ -50,6 +44,22 @@ public class Player implements Serializable, BulletManager {
 
     public void updatePoints() {
         shipController.getShipView().updatePoints(score);
+    }
+
+    public PlayerData buildData() {
+        return PlayerData.builder()
+                .id(id)
+                .score(score)
+                .lives(lives)
+                .shipController(shipController.buildData())
+                .forward(forward)
+                .left(rotateLeft)
+                .backward(backward)
+                .right(rotateRight)
+                .shoot(shoot)
+                .changeShootingMode(changeShootingMode)
+                .isNormalShooting(isNormalShooting)
+                .build();
     }
 
 
