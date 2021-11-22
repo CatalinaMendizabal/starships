@@ -6,12 +6,12 @@ import java.util.*;
 import controller.BulletController;
 import controller.ShipController;
 import edu.austral.dissis.starships.file.ImageLoader;
+import edu.austral.dissis.starships.vector.Vector2;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import model.Player;
 import model.components.Ship;
-import model.weapon.SingleShooting;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -76,8 +76,8 @@ public class ConfigurationReader {
     public static ShipController[] getGameConfig() {
         try {
             return new ShipController[]{
-                    new ShipController(new ShipView(imageLoader.loadFromResources(SHIP_NAMES[0], 100, 100), 200, 200), new Ship(200.0, new SingleShooting(), new Rectangle(70, 45), 100), new BulletController()),
-                    new ShipController(new ShipView(imageLoader.loadFromResources(SHIP_NAMES[1], 100, 100), 1000, 200), new Ship(200.0, new SingleShooting(), new Rectangle(70, 45), 100), new BulletController())
+                    new ShipController(new ShipView(imageLoader.loadFromResources(SHIP_NAMES[0], 100, 100), 200, 200), new Ship(200.0, new Rectangle(70, 45), 200), new BulletController()),
+                    new ShipController(new ShipView(imageLoader.loadFromResources(SHIP_NAMES[1], 100, 100), 1000, 200), new Ship( 200.0, new Rectangle(70, 45), 200), new BulletController())
             };
         } catch (IOException e) {
             e.printStackTrace();

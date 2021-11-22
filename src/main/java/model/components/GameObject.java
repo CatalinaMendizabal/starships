@@ -1,51 +1,31 @@
-/*
-
 package model.components;
-
-import collider.Collisionable;
-import edu.austral.dissis.starships.collision.Collider;
 import edu.austral.dissis.starships.vector.Vector2;
 import javafx.scene.shape.Shape;
 
-public abstract class GameObject implements Collisionable {
+public abstract class GameObject {
 
-    public Vector2 position;
-    public Vector2 direction;
-    public double healthPoints;
-    public Shape shape;
-    public float speed;
+    Double health;
+    Shape shape;
+    double speed;
+    double damage;
 
-    public GameObject( double healthPoints) {
-
-        this.healthPoints = healthPoints;
+    public GameObject(Double health, Shape shape, double speed, double damage) {
+        this.health = health;
+        this.shape = shape;
+        this.speed = speed;
+        this.damage = damage;
     }
 
-    public abstract void handleCollisionWith(Bullet2 bullet);
+    public Shape getShape() {return shape;}
 
-    public abstract void handleCollisionWith(Asteroid2 asteroid);
+    public void setShape(Shape shape) {this.shape = shape;}
 
-    public abstract void handleCollisionWith(Ship2 ship);
+    public double getSpeed() {return speed;}
 
-    */
-/*public abstract void collisionedWithShip(Ship starship);
+    public void setSpeed(double speed) {this.speed = speed;}
 
-    public abstract void collisionedWithBullet(Bullet bullet);
+    public double getHealth() {return health;}
 
-    public abstract void collisionedWithAsteroid(Asteroid asteroid);*//*
+    public void setHealth(double health) {this.health = health;}
 
-
-    public Vector2 getPosition() {return position;}
-
-    public Vector2 getDirection() {return direction;}
-
-    public double getHealthPoints() {return healthPoints;}
-
-    public void updateHealth(double healthPoints) {this.healthPoints = healthPoints;}
-
-    public float getSpeed() {return speed;}
-
-    public abstract Double getHealth();
-
-    public abstract void setHealth(double v);
 }
-*/

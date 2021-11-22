@@ -1,13 +1,10 @@
 package model.components.data;
-
-
 import javafx.scene.shape.Circle;
 import lombok.Builder;
 import lombok.Data;
 import model.components.Asteroid;
 
 import java.io.Serializable;
-
 
 @Data
 @Builder

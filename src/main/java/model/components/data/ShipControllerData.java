@@ -5,6 +5,7 @@ import edu.austral.dissis.starships.file.ImageLoader;
 import lombok.Builder;
 import lombok.Data;
 import lombok.SneakyThrows;
+import model.components.Ship;
 import view.ShipView;
 
 import java.io.Serializable;

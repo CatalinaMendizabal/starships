@@ -4,16 +4,18 @@ import edu.austral.dissis.starships.file.ImageLoader;
 import edu.austral.dissis.starships.vector.Vector2;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import lombok.Builder;
 import lombok.SneakyThrows;
 import model.components.data.BulletControllerData;
 import model.components.Bullet;
+import model.components.data.BulletData;
 import view.BulletView;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
-public class BulletController {
+public class BulletController implements Serializable {
     List<Bullet> bullets = new ArrayList<>();
     List<BulletView> bulletViews = new ArrayList<>();
 
@@ -87,10 +89,9 @@ public class BulletController {
         return result;
     }
 
-      public BulletControllerData buildData() {
+    public BulletControllerData buildData() {
         return BulletControllerData.builder()
                 .bullets(bullets.stream().map(Bullet::buildData).collect(Collectors.toList()))
                 .build();
     }
-
 }

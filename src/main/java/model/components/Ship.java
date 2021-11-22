@@ -1,28 +1,29 @@
 package model.components;
 
 import collider.Collisionable;
-import controller.BulletController;
 import edu.austral.dissis.starships.vector.Vector2;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
 import model.Player;
 import model.components.data.ShipData;
 import model.weapon.Shooting;
+import model.weapon.SingleShooting;
 
-@AllArgsConstructor
-@Data
-@Builder
-public class Ship implements Collisionable {
-    private Double health;
+import java.util.List;
+
+
+public class Ship extends GameObject implements Collisionable {
+
     private Shooting shootingStrategy;
-    private Shape shape;
-    private double speed;
 
-    public void fire(BulletController bulletController, Player shooter) {
-        shootingStrategy.shoot(shooter, bulletController, shape.getLayoutX() + ((Rectangle) shape).getWidth() / 2, shape.getLayoutY() + ((Rectangle) shape).getHeight() / 2, shape.getRotate());
+    public Ship(Double health, Shape shape, double speed) {
+        super(health, shape, speed, 0);
+        this.shootingStrategy = new SingleShooting();
+    }
+
+    public List<Bullet> fire(Player shooter) {
+        return shootingStrategy.shoot(shooter, shape.getLayoutX() + ((Rectangle) shape).getWidth() / 2, shape.getLayoutY() + ((Rectangle) shape).getHeight() / 2, shape.getRotate());
+        //return shootingStrategy.shoot(position.getX() + 50 , position.getY() + 50, 0);
     }
 
     @Override
@@ -34,13 +35,27 @@ public class Ship implements Collisionable {
     }
 
     @Override
-    public void handleCollisionWith(Asteroid asteroid) {}
+    public void handleCollisionWith(Bullet bullet) {
+        if (bullet.getBulletManager() == null || !bullet.getBulletManager().shipBullet(this)) {
+            health -= bullet.getDamage() / 10;
+            bullet.setSpeed(0);
+            if (bullet.getBulletManager() != null) {
+                if (health < 0) bullet.getBulletManager().addPoints(bullet.getDamage());
+                bullet.getBulletManager().addPoints(bullet.getDamage() / 10);
+            }
+        }
+    }
+
+    @Override
+    public void handleCollisionWith(Asteroid asteroid) {
+        health -= asteroid.getHealth() / 2;
+        asteroid.setHealth(0.0);
+    }
 
     @Override
     public void handleCollisionWith(Ship ship) {}
 
-
-    public Double getHealth() {return health;}
+    public double getHealth() {return health;}
 
     public void setHealth(Double health) {
         this.health = health;
@@ -50,20 +65,8 @@ public class Ship implements Collisionable {
         this.shootingStrategy = shootingStrategy;
     }
 
-    public void setShape(Shape shape) {
-        this.shape = shape;
-    }
+    public void setShape(Shape shape) {this.shape = shape;}
 
-    @Override
-    public void handleCollisionWith(Bullet bullet) {
-        if (bullet.getShooter().getShipController().getShip() != this) {
-            health -= bullet.getDamage() / 10;
-
-            bullet.setSpeed(0);
-            if (health < 0) bullet.getShooter().addPoints(bullet.getDamage());
-            bullet.getShooter().addPoints(bullet.getDamage() / 10);
-        }
-    }
 
     public ShipData buildData() {
         return ShipData.builder()

@@ -5,22 +5,17 @@ import edu.austral.dissis.starships.vector.Vector2;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 import lombok.Data;
+import model.BulletManager;
 import model.components.data.BulletData;
 import model.Player;
 
-@Data
-public class Bullet implements Collisionable {
+public class Bullet extends GameObject implements Collisionable {
 
-    Shape shape;
-    double speed;
-    double damage;
-    Player shooter;
+    BulletManager bulletManager;
 
-    public Bullet(Circle circle, double speed, double damage, Player shooter) {
-        shape = circle;
-        this.speed = speed;
-        this.damage = damage;
-        this.shooter = shooter;
+    public Bullet(Shape shape, double speed, double damage, BulletManager bulletManager) {
+        super(0.0, shape, speed, damage);
+        this.bulletManager = bulletManager;
     }
 
     public void move(Vector2 to) {
@@ -42,9 +37,15 @@ public class Bullet implements Collisionable {
     @Override
     public void handleCollisionWith(Asteroid asteroid) {
         speed = 0;
-        if (asteroid.getHealth() < 0) shooter.addPoints(damage);
-        shooter.addPoints(damage);
+        if (asteroid.getHealth() < 0) bulletManager.addPoints(damage);
+        bulletManager.addPoints(damage);
     }
+
+    public double getDamage() {return damage;}
+
+    public BulletManager getBulletManager() {return bulletManager;}
+
+    public void setBulletManager(BulletManager bulletManager) {this.bulletManager = bulletManager;}
 
     public BulletData buildData() {
         return BulletData.builder()
