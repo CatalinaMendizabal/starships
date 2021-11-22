@@ -8,9 +8,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import model.components.data.AsteroidData;
 
-public class Asteroid extends GameObject {
+public class Asteroid extends GameObject implements Collisionable{
 
-    public Asteroid(Double health, Shape shape, double speed) {super(health, shape, speed);}
+    public Asteroid(Double health, Shape shape, double speed) {super(health, shape, speed, 0);}
 
     public Vector2 getPosition() {return Vector2.vector(((Circle) shape).getCenterX(), ((Circle) shape).getCenterY());}
 

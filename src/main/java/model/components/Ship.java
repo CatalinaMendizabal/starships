@@ -11,12 +11,12 @@ import model.weapon.SingleShooting;
 import java.util.List;
 
 
-public class Ship extends GameObject {
+public class Ship extends GameObject implements Collisionable{
 
     private Shooting shootingStrategy;
 
     public Ship(Double health, Shape shape, double speed) {
-        super(health, shape, speed);
+        super(health, shape, speed, 0);
         this.shootingStrategy = new SingleShooting();
     }
 

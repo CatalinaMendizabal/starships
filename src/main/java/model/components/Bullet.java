@@ -9,18 +9,12 @@ import model.BulletManager;
 import model.components.data.BulletData;
 import model.Player;
 
-@Data
-public class Bullet implements Collisionable {
+public class Bullet extends GameObject implements Collisionable {
 
-    Shape shape;
-    double speed;
-    double damage;
     BulletManager bulletManager;
 
-    public Bullet(Circle circle, double speed, double damage, BulletManager bulletManager) {
-        shape = circle;
-        this.speed = speed;
-        this.damage = damage;
+    public Bullet(Shape shape, double speed, double damage, BulletManager bulletManager) {
+        super(0.0, shape, speed, damage);
         this.bulletManager = bulletManager;
     }
 
@@ -46,6 +40,12 @@ public class Bullet implements Collisionable {
         if (asteroid.getHealth() < 0) bulletManager.addPoints(damage);
         bulletManager.addPoints(damage);
     }
+
+    public double getDamage() {return damage;}
+
+    public BulletManager getBulletManager() {return bulletManager;}
+
+    public void setBulletManager(BulletManager bulletManager) {this.bulletManager = bulletManager;}
 
     public BulletData buildData() {
         return BulletData.builder()
