@@ -1,4 +1,4 @@
-package model;
+package model.entity;
 
 import collider.EntityCollision;
 import edu.austral.dissis.starships.vector.Vector2;

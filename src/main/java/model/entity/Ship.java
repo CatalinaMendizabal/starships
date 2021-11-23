@@ -1,4 +1,4 @@
-package model;
+package model.entity;
 
 import collider.Collisionable;
 import collider.EntityCollision;
@@ -7,8 +7,8 @@ import edu.austral.dissis.starships.vector.Vector2;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import model.weapon.Bullet;
-import model.weapon.BulletManager;
+import model.entity.weapon.Bullet;
+import model.entity.weapon.BulletManager;
 import strategy.Shooting;
 import view.EntityView;
 

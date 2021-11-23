@@ -4,7 +4,7 @@ import controller.ShipController;
 import javafx.scene.input.KeyCode;
 import lombok.Builder;
 import lombok.Data;
-import player.Player;
+import model.Player;
 
 import java.io.Serializable;
 import java.util.List;

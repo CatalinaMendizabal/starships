@@ -1,4 +1,4 @@
-package model;
+package model.entity;
 
 import collider.Collisionable;
 import collider.EntityCollision;
@@ -6,7 +6,7 @@ import data.SaveAsteroid;
 import edu.austral.dissis.starships.vector.Vector2;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import model.weapon.Bullet;
+import model.entity.weapon.Bullet;
 import view.EntityView;
 
 import java.io.Serializable;

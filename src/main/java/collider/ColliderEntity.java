@@ -2,7 +2,7 @@ package collider;
 
 import javafx.scene.shape.Shape;
 import lombok.AllArgsConstructor;
-import model.Entity;
+import model.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
 @AllArgsConstructor

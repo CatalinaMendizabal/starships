@@ -1,13 +1,13 @@
-package model.weapon;
+package model.entity.weapon;
 
 import collider.Collisionable;
 import collider.EntityCollision;
 import data.SaveBullet;
 import edu.austral.dissis.starships.vector.Vector2;
 import lombok.Data;
-import model.Asteroid;
-import model.Entity;
-import model.Ship;
+import model.entity.Asteroid;
+import model.entity.Entity;
+import model.entity.Ship;
 import view.EntityView;
 
 import java.util.ArrayList;

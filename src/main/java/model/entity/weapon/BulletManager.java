@@ -1,7 +1,7 @@
-package model.weapon;
+package model.entity.weapon;
 
-import model.Asteroid;
-import model.Ship;
+import model.entity.Asteroid;
+import model.entity.Ship;
 
 public interface BulletManager {
 

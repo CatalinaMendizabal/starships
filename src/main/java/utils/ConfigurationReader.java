@@ -7,7 +7,7 @@ import edu.austral.dissis.starships.file.ImageLoader;
 import edu.austral.dissis.starships.vector.Vector2;
 import javafx.scene.input.KeyCode;
 import lombok.SneakyThrows;
-import model.Ship;
+import model.entity.Ship;
 import strategy.NormalShooting;
 import view.entity.ShipView;
 

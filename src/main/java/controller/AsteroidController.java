@@ -1,6 +1,6 @@
 package controller;
 
-import model.Asteroid;
+import model.entity.Asteroid;
 
 import java.util.*;
 

@@ -8,14 +8,9 @@ import edu.austral.dissis.starships.game.KeyTracker;
 import edu.austral.dissis.starships.vector.Vector2;
 import factory.AsteroidFactory;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import model.Asteroid;
-import model.Entity;
-import player.Player;
+import model.entity.Asteroid;
+import model.entity.Entity;
+import model.Player;
 import view.ImageRenderer;
 
 import java.util.ArrayList;

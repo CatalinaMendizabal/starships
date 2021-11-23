@@ -4,9 +4,9 @@ import collider.ColliderEntity;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
-import model.Asteroid;
-import model.weapon.Bullet;
-import model.Ship;
+import model.entity.Asteroid;
+import model.entity.weapon.Bullet;
+import model.entity.Ship;
 
 public class ColliderView implements EntityView {
 

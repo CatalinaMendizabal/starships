@@ -1,7 +1,7 @@
 package strategy;
 
 import edu.austral.dissis.starships.vector.Vector2;
-import model.weapon.Bullet;
+import model.entity.weapon.Bullet;
 
 import java.util.List;
 

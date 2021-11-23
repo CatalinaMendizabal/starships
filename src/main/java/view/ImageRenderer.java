@@ -2,7 +2,7 @@ package view;
 
 import edu.austral.dissis.starships.vector.Vector2;
 import javafx.scene.layout.Pane;
-import model.Entity;
+import model.entity.Entity;
 
 import java.util.ArrayList;
 import java.util.List;

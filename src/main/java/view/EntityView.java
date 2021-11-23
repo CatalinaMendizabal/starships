@@ -1,8 +1,8 @@
 package view;
 
-import model.Asteroid;
-import model.weapon.Bullet;
-import model.Ship;
+import model.entity.Asteroid;
+import model.entity.weapon.Bullet;
+import model.entity.Ship;
 
 public interface EntityView {
 

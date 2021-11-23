@@ -1,4 +1,4 @@
-package player;
+package model;
 
 import controller.ShipController;
 import data.SavePlayer;
@@ -8,9 +8,9 @@ import javafx.scene.layout.Pane;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import model.Asteroid;
-import model.Ship;
-import model.weapon.BulletManager;
+import model.entity.Asteroid;
+import model.entity.Ship;
+import model.entity.weapon.BulletManager;
 import strategy.NormalShooting;
 import strategy.MultipleShooting;
 

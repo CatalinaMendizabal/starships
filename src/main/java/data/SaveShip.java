@@ -3,7 +3,7 @@ package data;
 import edu.austral.dissis.starships.vector.Vector2;
 import lombok.Builder;
 import lombok.Data;
-import model.Ship;
+import model.entity.Ship;
 import strategy.Shooting;
 import strategy.NormalShooting;
 

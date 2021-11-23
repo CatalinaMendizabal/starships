@@ -7,9 +7,9 @@ import javafx.scene.layout.Pane;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import model.weapon.Bullet;
-import model.Ship;
-import player.Player;
+import model.entity.weapon.Bullet;
+import model.entity.Ship;
+import model.Player;
 import view.entity.ShipView;
 
 import java.io.Serializable;

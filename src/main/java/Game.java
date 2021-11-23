@@ -13,7 +13,7 @@ import javafx.scene.text.Text;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
-import player.Player;
+import model.Player;
 import serializer.GameSerializer;
 import serializer.GameState;
 import UI.*;

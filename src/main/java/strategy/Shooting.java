@@ -1,6 +1,6 @@
 package strategy;
 
-import model.weapon.Bullet;
+import model.entity.weapon.Bullet;
 
 import java.io.Serializable;
 import java.util.List;

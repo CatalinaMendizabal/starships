@@ -1,7 +1,7 @@
 package controller;
 
 import data.SaveBulletController;
-import model.weapon.Bullet;
+import model.entity.weapon.Bullet;
 
 import java.util.ArrayList;
 import java.util.List;

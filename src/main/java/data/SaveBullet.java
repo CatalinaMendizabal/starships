@@ -3,7 +3,7 @@ package data;
 import edu.austral.dissis.starships.vector.Vector2;
 import lombok.Builder;
 import lombok.Data;
-import model.weapon.Bullet;
+import model.entity.weapon.Bullet;
 
 import java.io.Serializable;
 

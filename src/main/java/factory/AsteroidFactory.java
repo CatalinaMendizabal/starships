@@ -1,7 +1,7 @@
 package factory;
 
 import edu.austral.dissis.starships.vector.Vector2;
-import model.Asteroid;
+import model.entity.Asteroid;
 
 import java.util.Random;
 

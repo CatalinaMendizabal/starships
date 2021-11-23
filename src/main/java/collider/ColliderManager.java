@@ -1,6 +1,6 @@
 package collider;
 
-import model.Entity;
+import model.entity.Entity;
 import view.ColliderView;
 
 import java.util.List;

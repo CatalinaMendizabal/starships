@@ -3,8 +3,8 @@ package serializer;
 import data.SaveAsteroid;
 import data.SavePlayer;
 import lombok.Data;
-import model.Asteroid;
-import player.Player;
+import model.entity.Asteroid;
+import model.Player;
 
 import java.io.Serializable;
 import java.util.ArrayList;

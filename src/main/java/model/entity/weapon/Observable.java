@@ -1,4 +1,4 @@
-package model.weapon;
+package model.entity.weapon;
 
 public interface Observable {
 
