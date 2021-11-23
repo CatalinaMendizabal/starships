@@ -8,6 +8,7 @@ import edu.austral.dissis.starships.game.KeyTracker;
 import edu.austral.dissis.starships.vector.Vector2;
 import factory.AsteroidFactory;
 import javafx.scene.layout.Pane;
+import lombok.Getter;
 import model.entity.Asteroid;
 import model.entity.Entity;
 import model.Player;
@@ -19,6 +20,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Getter
 public class GameController {
     Player[] players;
     AsteroidController asteroidController;
@@ -28,13 +30,17 @@ public class GameController {
     CollisionEngine collisionEngine = new CollisionEngine();
     ColliderManager colliderManager = new ColliderManager();
     ImageRenderer imageRenderer;
+    Boolean[] deathPlayer;
+    int winnerIndex;
+    int winnerScore;
 
-    public GameController(Player[] players, KeyTracker keyTracker, Pane pane, AsteroidController asteroidController) {
+    public GameController(Player[] players, KeyTracker keyTracker, Pane pane, AsteroidController asteroidController, Boolean[] deathPlayer) {
         this.players = players;
         this.keyTracker = keyTracker;
         this.pane = pane;
         this.asteroidController = asteroidController;
         this.imageRenderer = new ImageRenderer(pane);
+        this.deathPlayer = deathPlayer;
     }
 
     public void update(double secondsSinceLastFrame) {
@@ -49,14 +55,46 @@ public class GameController {
         entities.addAll(Arrays.stream(players).map(Player::getShipController).map(ShipController::getShip).collect(Collectors.toList()));
 
         List<ColliderEntity> colliderEntities = colliderManager.generateColliders(entities);
-
         collisionEngine.checkCollisions(colliderEntities.stream().map(e -> (Collisionable) e).collect(Collectors.toList()));
-
         imageRenderer.renderObjects(colliderEntities.stream().map(ColliderEntity::getEntity).collect(Collectors.toList()));
 
         updateHealths();
+        updateDeathPlayers(players, deathPlayer);
         updateDeaths();
         spawnAsteroid();
+        checkWinner();
+    }
+
+    public int getWinnerIndex() {return winnerIndex;}
+
+    public int getWinnerScore() {return winnerScore;}
+
+    public void updateDeathPlayers(Player[] players, Boolean[] deathPlayers) {
+        for (int i = 0; i < players.length; i++) {
+            if (players[i].getShipController().getShip().getHealth() <= 0)  deathPlayers[i] = true;
+        }
+    }
+
+    public boolean checkEndGame( Boolean[] deathPlayers) {
+        boolean status = true;
+        for (Boolean deathPlayer : deathPlayers) {
+            if (!deathPlayer) {
+                status = false;
+                break;
+            }
+        }
+        return status;
+    }
+
+    public void checkWinner() {
+        int max = 0;
+        for (int i = 0; i < players.length; i++) {
+            if (players[i].getScore() > max) {
+                max = players[i].getScore();
+                winnerIndex = i;
+            }
+        }
+        winnerScore = max;
     }
 
     private void updateHealths() {
@@ -86,14 +124,12 @@ public class GameController {
     private void updateDeaths() {
         for(Player player : players) {
             if(player.isShipDead()) {
-                 player.updateDeath();
+                player.updateDeath();
             }
             player.getShipController().getBulletController().removeDeadBullets(pane.getWidth(), pane.getHeight());
         }
         asteroidController.killOutOfBounds(pane.getWidth(), pane.getHeight());
         asteroidController.updateDeaths();
     }
-
-    public boolean isOver() {return Arrays.stream(players).allMatch(Player::isDead);}
 
 }

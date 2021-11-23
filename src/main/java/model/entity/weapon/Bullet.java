@@ -73,7 +73,6 @@ public class Bullet implements Entity, Observable, EntityCollision {
                 .posY(position.getY())
                 .rotate(direction)
                 .radius(5)
-
                 .build();
     }
 

@@ -15,9 +15,6 @@ public class MultipleShooting implements Shooting {
         double currentTime = System.currentTimeMillis();
         if(currentTime - lastShot < waitABit) return List.of();
         lastShot = currentTime;
-//        bulletController.addBullet(createBullet(x, y, angle, shooter));
-//        bulletController.addBullet(createBullet(x, y, angle - 15, shooter));
-//        bulletController.addBullet(createBullet(x, y, angle + 15, shooter));
         return List.of(
                 createBullet(x, y, angle),
                 createBullet(x, y, angle - 30),

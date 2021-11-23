@@ -20,6 +20,7 @@ import UI.*;
 import utils.ConfigurationReader;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -106,12 +107,12 @@ class GameManager {
             players = new Player[ConfigurationReader.PLAYERS];
             for (int i = 0; i < ConfigurationReader.PLAYERS; i++) {
                 players[i] = new Player(i, 0, ConfigurationReader.LIVES, Objects.requireNonNull(ConfigurationReader.getPlayerShips())[i],
-                                ConfigurationReader.PLAYER_KEYS[i][0],
-                                ConfigurationReader.PLAYER_KEYS[i][1],
-                                ConfigurationReader.PLAYER_KEYS[i][2],
-                                ConfigurationReader.PLAYER_KEYS[i][3],
-                                ConfigurationReader.PLAYER_KEYS[i][4],
-                                ConfigurationReader.PLAYER_KEYS[i][5], true);
+                        ConfigurationReader.PLAYER_KEYS[i][0],
+                        ConfigurationReader.PLAYER_KEYS[i][1],
+                        ConfigurationReader.PLAYER_KEYS[i][2],
+                        ConfigurationReader.PLAYER_KEYS[i][3],
+                        ConfigurationReader.PLAYER_KEYS[i][4],
+                        ConfigurationReader.PLAYER_KEYS[i][5], true);
             }
             asteroidController = new AsteroidController();
         } else {
@@ -193,12 +194,14 @@ class MainTimer extends GameTimer {
     RootSetter rootSetter;
     Pane pane;
     Player[] players;
-
+    Boolean[] deathPlayer;
 
     boolean paused = false;
 
     public MainTimer(Player[] players, KeyTracker keyTracker, Pane pane, AsteroidController asteroidController, RootSetter rootSetter) {
-        gameController = new GameController(players, keyTracker, pane, asteroidController);
+        deathPlayer = new Boolean[players.length];
+        Arrays.fill(deathPlayer, false);
+        gameController = new GameController(players, keyTracker, pane, asteroidController, deathPlayer);
         this.pane = pane;
         this.players = players;
         this.rootSetter = rootSetter;
@@ -210,11 +213,9 @@ class MainTimer extends GameTimer {
         if (paused) {
             secondsSinceLastFrame = 0;
             paused = false;
-        }
-
-        if (gameController.isOver()) {
+        } else if (gameController.checkEndGame(deathPlayer)) {
             stop();
-            gameOverUI = new GameOverUI(players);
+            gameOverUI = new GameOverUI(gameController);
             gameOverUI.display(rootSetter, pane);
         }
 
@@ -222,6 +223,6 @@ class MainTimer extends GameTimer {
     }
 
     public void loadController(Player[] players, KeyTracker keyTracker, ImageLoader imageLoader, Pane pane, AsteroidController asteroidController) {
-        gameController = new GameController(players, keyTracker, pane, asteroidController);
+        gameController = new GameController(players, keyTracker, pane, asteroidController, deathPlayer);
     }
 }

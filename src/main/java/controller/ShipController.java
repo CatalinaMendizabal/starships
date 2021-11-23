@@ -2,7 +2,6 @@ package controller;
 
 import data.SaveShipController;
 import edu.austral.dissis.starships.vector.Vector2;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,26 +24,24 @@ public class ShipController implements Serializable {
 
     public void forward(Double secondsSinceLastFrame, Pane pane) {
         double movement = secondsSinceLastFrame * ship.getSpeed();
-        Vector2 movementVector = Vector2.vectorFromModule(movement, Math.toRadians(ship.getDirection()) - Math.PI/2);
+        Vector2 movementVector = Vector2.vectorFromModule(movement, Math.toRadians(ship.getDirection()) - Math.PI / 2);
         Vector2 from = Vector2.vector(ship.getPosition().getX(), ship.getPosition().getY());
         Vector2 to = from.add(movementVector);
-        if(isInBounds(pane, to)) {
-            moveShip(to);
-        }
+        if (checkScreen(pane, to)) moveShip(to);
+
     }
 
-    private boolean isInBounds(Pane pane, Vector2 to) {
+    private boolean checkScreen(Pane pane, Vector2 to) {
         return to.getX() > 0 && to.getX() < pane.getWidth() - shipView.getWidth() && to.getY() > 0 && to.getY() < pane.getHeight() - shipView.getHeight();
     }
 
     public void backward(Double secondsSinceLastFrame, Pane pane) {
         double movement = secondsSinceLastFrame * ship.getSpeed();
-        Vector2 movementVector = Vector2.vectorFromModule(movement, Math.toRadians(ship.getDirection()) + Math.PI/2);
+        Vector2 movementVector = Vector2.vectorFromModule(movement, Math.toRadians(ship.getDirection()) + Math.PI / 2);
         Vector2 from = Vector2.vector(ship.getPosition().getX(), ship.getPosition().getY());
         Vector2 to = from.add(movementVector);
-        if(isInBounds(pane, to)) {
-            moveShip(to);
-        }
+        if (checkScreen(pane, to)) moveShip(to);
+
     }
 
     public void rotateLeft(Double secondsSinceLastFrame) {
@@ -57,22 +54,15 @@ public class ShipController implements Serializable {
         ship.setDirection(ship.getDirection() + movement);
     }
 
-    public ImageView updateDeath() {
-        if(ship.getHealth() <= 0) {
-            shipView.getHealthView().setVisible(false);
-            shipView.getPoints().setVisible(false);
-            return shipView.getImageView();
-        }
-        else return null;
-    }
-
     public void fire(Player shooter) {
         List<Bullet> bullets = ship.fire();
         bullets.forEach(bulletController::addBullet);
         bullets.forEach(bullet -> bullet.attachManager(shooter));
     }
 
-    public void moveShip(Vector2 to) {ship.move(to);}
+    public void moveShip(Vector2 to) {
+        ship.move(to);
+    }
 
     public void updateHealth() {
         shipView.updateHealth(ship.getHealth());
