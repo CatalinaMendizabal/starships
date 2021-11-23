@@ -1,41 +1,40 @@
-import UI.ChooseShipUI;
-import UI.GameOverUI;
-import UI.IntroGameUI;
-import UI.LoadGameUI;
 import controller.AsteroidController;
-import edu.austral.dissis.starships.collision.CollisionEngine;
+import controller.GameController;
+import data.SaveAsteroid;
+import data.SavePlayer;
 import edu.austral.dissis.starships.file.ImageLoader;
 import edu.austral.dissis.starships.game.*;
-import factory.AsteroidFactory;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
-import lombok.NonNull;
+import javafx.scene.text.Text;
 import lombok.Setter;
 import lombok.SneakyThrows;
-import model.components.data.AsteroidData;
-import model.Player;
-import model.components.data.PlayerData;
-import utils.*;
-import model.serializer.GameSerializer;
-import model.serializer.GameState;
+import org.jetbrains.annotations.NotNull;
+import player.Player;
+import serializer.GameSerializer;
+import serializer.GameState;
+import UI.*;
+import utils.ConfigurationReader;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class Game extends GameApplication {
 
     @Override
-    @NonNull
-    public WindowSettings setupWindow() {
-        return WindowSettings.fromTitle("Starships!");
+    public @NotNull WindowSettings setupWindow() {
+        return WindowSettings.fromTitle("Starships!").withSize(1920, 1080);
     }
 
     @Override
     public Parent initRoot(GameContext context) {
+
         try {
+            ConfigurationReader.reloadConfig();
             return new GameManager(this, context).init();
         } catch (IOException e) {
             e.printStackTrace();
@@ -46,9 +45,8 @@ public class Game extends GameApplication {
 
 class GameManager {
 
-    RootSetter rootSetter;
-    GameContext context;
-
+    final RootSetter rootSetter;
+    final GameContext context;
     MainTimer mainTimer;
 
     public GameManager(RootSetter rootSetter, GameContext gameContext) {
@@ -58,9 +56,7 @@ class GameManager {
 
     boolean isIntro = true;
 
-    Parent init() throws IOException {
-        return isIntro ? loadIntro(null) : loadGame(null);
-    }
+    Parent init() throws IOException {return isIntro ? loadIntro(null) : loadGame(null);}
 
     public Parent loadIntro(GameState gameState) throws IOException {
         Pane pane = new Pane();
@@ -97,6 +93,68 @@ class GameManager {
         return pane;
     }
 
+    private Parent loadGame(GameState gameState) throws IOException {
+
+        Pane pane = new Pane();
+        LoadGameUI loadGameUI = new LoadGameUI();
+        loadGameUI.generateGameUI(pane);
+
+        Player[] players;
+        AsteroidController asteroidController;
+
+        if (gameState == null) {
+            players = new Player[ConfigurationReader.PLAYERS];
+            for (int i = 0; i < ConfigurationReader.PLAYERS; i++) {
+                players[i] = new Player(i, 0, ConfigurationReader.LIVES, Objects.requireNonNull(ConfigurationReader.getPlayerShips())[i],
+                                ConfigurationReader.PLAYER_KEYS[i][0],
+                                ConfigurationReader.PLAYER_KEYS[i][1],
+                                ConfigurationReader.PLAYER_KEYS[i][2],
+                                ConfigurationReader.PLAYER_KEYS[i][3],
+                                ConfigurationReader.PLAYER_KEYS[i][4],
+                                ConfigurationReader.PLAYER_KEYS[i][5], true);
+            }
+            asteroidController = new AsteroidController();
+        } else {
+            players = gameState.getPlayers().stream().map(SavePlayer::toPlayer).toArray(Player[]::new);
+            asteroidController = new AsteroidController(gameState.getAsteroids().stream().map(SaveAsteroid::toAsteroid).collect(Collectors.toList()));
+        }
+
+        for (int i = 0, playersLength = players.length; i < playersLength; i++) {
+            Player player = players[i];
+            player.updateShipStyle(ConfigurationReader.SHIP_NAMES[player.getId()]);
+
+            Group healthView = player.getShipController().getShipView().getHealthView();
+            healthView.setLayoutX(10 + 700 * i);
+            healthView.setLayoutY(15);
+            pane.getChildren().add(healthView);
+
+            Text points = player.getShipController().getShipView().getPoints();
+            points.setLayoutX(630 + 700 * i);
+            points.setLayoutY(45);
+            pane.getChildren().add(points);
+        }
+
+        if (mainTimer == null)
+            mainTimer = new MainTimer(players, context.getKeyTracker(), pane, asteroidController, rootSetter);
+        mainTimer.loadController(players, context.getKeyTracker(), loadGameUI.getImageLoader(), pane, asteroidController);
+
+        pane.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.P) {
+                isIntro = !isIntro;
+                try {
+                    mainTimer.stop();
+                    mainTimer.setPaused(true);
+                    rootSetter.setRoot(loadIntro(new GameState(players, asteroidController.getAsteroids())));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        });
+        mainTimer.start();
+        return pane;
+    }
+
     private Parent chooseShip(int player, GameState gameState) throws IOException {
         Pane pane = new Pane();
         ChooseShipUI chooseShipUI = new ChooseShipUI();
@@ -125,108 +183,45 @@ class GameManager {
         return pane;
     }
 
-    private Parent loadGame(GameState gameState) throws IOException {
-
-        Pane pane = new Pane();
-        LoadGameUI loadGameUI = new LoadGameUI();
-        loadGameUI.generateGameUI(pane);
-
-        ConfigurationReader cr = new ConfigurationReader();
-        Player[] players;
-        AsteroidController asteroidController;
-
-        if (gameState == null) {
-            players = cr.getPlayers();
-            cr.configKeys(pane);
-            asteroidController = new AsteroidController();
-        } else {
-            players = gameState.getPlayers().stream().map(PlayerData::toPlayer).toArray(Player[]::new);
-            cr.configSaveGameKeys(players, pane);
-            asteroidController = new AsteroidController(gameState.getAsteroids().stream().map(AsteroidData::toAsteroid).collect(Collectors.toList()));
-            pane.getChildren().addAll(asteroidController.getViews());
-        }
-
-        for (Player player : players) {player.updateShipStyle(ConfigurationReader.SHIP_NAMES[player.getId()]);}
-
-        setTimerConfiguration(loadGameUI.getImageLoader(), pane, players, asteroidController);
-
-
-        pane.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.P) {
-                isIntro = !isIntro;
-                try {
-                    mainTimer.stop();
-                    mainTimer.setPaused(true);
-                    rootSetter.setRoot(loadIntro(new GameState(players, asteroidController.getAsteroids())));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else if (event.getCode() == KeyCode.ESCAPE) System.exit(0);
-        });
-
-        mainTimer.start();
-
-        return pane;
-    }
-
-    private void setTimerConfiguration(ImageLoader imageLoader, Pane pane, Player[] players, AsteroidController asteroidController) {
-        if (mainTimer == null)
-            mainTimer = new MainTimer(rootSetter, players, context.getKeyTracker(), imageLoader, pane, asteroidController);
-        mainTimer.setPlayers(players);
-        mainTimer.setKeyTracker(context.getKeyTracker());
-        mainTimer.setImageLoader(imageLoader);
-        mainTimer.setPane(pane);
-        mainTimer.setAsteroidController(asteroidController);
-    }
 }
 
 @Setter
 class MainTimer extends GameTimer {
-    Player[] players;
-    AsteroidController asteroidController;
-    KeyTracker keyTracker;
-    ImageLoader imageLoader;
-    Pane pane;
-    AsteroidFactory asteroidFactory = new AsteroidFactory();
-    CollisionEngine collisionEngine = new CollisionEngine();
-    AsteroidSpawner spawnAsteroids = new AsteroidSpawner();
-    PlayerManagement playerManagement = new PlayerManagement();
+
+    GameController gameController;
     GameOverUI gameOverUI;
     RootSetter rootSetter;
+    Pane pane;
+    Player[] players;
+
 
     boolean paused = false;
-    Boolean[] deathPlayer;
-    boolean endGame = false;
 
-    public MainTimer(RootSetter rootSetter, Player[] players, KeyTracker keyTracker, ImageLoader imageLoader, Pane pane, AsteroidController asteroidController) {
-        this.rootSetter = rootSetter;
-        this.players = players;
-        this.keyTracker = keyTracker;
-        this.imageLoader = imageLoader;
+    public MainTimer(Player[] players, KeyTracker keyTracker, Pane pane, AsteroidController asteroidController, RootSetter rootSetter) {
+        gameController = new GameController(players, keyTracker, pane, asteroidController);
         this.pane = pane;
-        this.asteroidController = asteroidController;
-        deathPlayer = new Boolean[players.length];
-        Arrays.fill(deathPlayer, false);
+        this.players = players;
+        this.rootSetter = rootSetter;
     }
 
     @SneakyThrows
     @Override
-    public void nextFrame(double lastFrame) {
+    public void nextFrame(double secondsSinceLastFrame) {
         if (paused) {
-            lastFrame = 0;
+            secondsSinceLastFrame = 0;
             paused = false;
-        } else if (endGame) {
+        }
+
+        if (gameController.isOver()) {
             stop();
             gameOverUI = new GameOverUI(players);
             gameOverUI.display(rootSetter, pane);
         }
 
-        pane.requestFocus();
-        playerManagement.updateDeathPlayers(players, deathPlayer);
-        endGame = playerManagement.checkEndGame(deathPlayer);
-        playerManagement.updatePosition(lastFrame, players, pane, keyTracker, collisionEngine, asteroidController);
-        playerManagement.updateHealths(players);
-        playerManagement.updateDeaths(players, pane, asteroidController);
-        spawnAsteroids.spawnAsteroid(asteroidFactory, asteroidController, imageLoader, pane);
+        gameController.update(secondsSinceLastFrame);
+    }
+
+    public void loadController(Player[] players, KeyTracker keyTracker, ImageLoader imageLoader, Pane pane, AsteroidController asteroidController) {
+        gameController = new GameController(players, keyTracker, pane, asteroidController);
     }
 }

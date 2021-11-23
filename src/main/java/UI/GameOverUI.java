@@ -11,7 +11,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import model.Player;
+import org.jetbrains.annotations.NotNull;
+import player.Player;
 
 import java.io.IOException;
 
@@ -33,7 +34,7 @@ public class GameOverUI {
     }
     public void display(RootSetter rootSetter, Pane pane) throws IOException {
         checkWinner();
-        rootSetter.setRoot(gameOver(rootSetter, pane));
+        if (rootSetter != null) rootSetter.setRoot(gameOver(rootSetter, pane));
         System.out.println("Game Over!");
         System.out.println("Player " + (winnerIndex + 1) + " is the winner with: " + players[winnerIndex].getScore() + " points!");
     }
@@ -72,20 +73,8 @@ public class GameOverUI {
         text3.setX(150);
         text3.setY(200);
 
-        /*Button button = new IntroductionButton("Play Again", 350, 300).getButton();
-        IntroGameUI introGameUI = new IntroGameUI();
-        button.setOnMouseClicked(e -> {
-            try {
-                introGameUI.generateIntro(pane);
-                rootSetter.setRoot(pane);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            };
-        });
-*/
         Button exit = new IntroductionButton("Exit", 150, 300).getButton();
         exit.setOnMouseClicked(e -> {System.exit(0);});
-
 
         pane.getChildren().addAll(text, text2, text3, exit );
     }
