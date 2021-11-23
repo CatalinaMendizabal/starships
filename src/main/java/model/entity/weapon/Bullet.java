@@ -31,7 +31,6 @@ public class Bullet implements Entity, Observable, EntityCollision {
     }
 
     public void handleCollisionWith(Collisionable collider) {
-        // double dispatch
         collider.getEntity().handleCollisionWith(this);
     }
 
@@ -40,9 +39,19 @@ public class Bullet implements Entity, Observable, EntityCollision {
     }
 
     @Override
+    public Vector2 getPosition() {
+        return position;
+    }
+
+    @Override
+    public double getDirection() {
+        return direction;
+    }
+
+    @Override
     public void handleCollisionWith(Asteroid asteroid) {
         speed = 0;
-        if(observers != null) {
+        if (observers != null) {
             for (BulletManager observer : observers) {
                 observer.bulletEntity(damage, asteroid);
             }
@@ -55,6 +64,7 @@ public class Bullet implements Entity, Observable, EntityCollision {
     @Override
     public void handleCollisionWith(Bullet bullet) {}
 
+
     public SaveBullet toDTO() {
         return SaveBullet.builder()
                 .speed(speed)
@@ -63,17 +73,8 @@ public class Bullet implements Entity, Observable, EntityCollision {
                 .posY(position.getY())
                 .rotate(direction)
                 .radius(5)
+
                 .build();
-    }
-
-    @Override
-    public Vector2 getPosition() {
-        return position;
-    }
-
-    @Override
-    public double getDirection() {
-        return direction;
     }
 
     @Override

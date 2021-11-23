@@ -14,6 +14,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Data
 public class Asteroid implements Serializable, Entity, EntityCollision {
+
     Double health;
     Vector2 position;
     double direction;

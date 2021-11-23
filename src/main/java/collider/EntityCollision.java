@@ -5,6 +5,7 @@ import model.entity.weapon.Bullet;
 import model.entity.Ship;
 
 public interface EntityCollision {
+
     void handleCollisionWith(Collisionable collider);
 
     void handleCollisionWith(Asteroid asteroid);

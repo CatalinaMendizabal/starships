@@ -20,6 +20,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Builder
 public class Player implements Serializable, BulletManager {
+
     private int id;
     private int score;
     private int lives;
@@ -35,7 +36,7 @@ public class Player implements Serializable, BulletManager {
     boolean isNormalShooting;
 
     public void updateInput(Pane pane, KeyTracker keyTracker, double secondsSinceLastFrame) {
-        if(isDead()) return;
+        if (isDead()) return;
         keyTracker.getKeySet().forEach(keyCode -> {
             if (keyCode == keyForward) shipController.forward(secondsSinceLastFrame, pane);
             else if (keyCode == keyBackward) shipController.backward(secondsSinceLastFrame, pane);
@@ -44,28 +45,30 @@ public class Player implements Serializable, BulletManager {
             else if (keyCode == keyShoot) shipController.fire(this);
             else if (keyCode == changeShootingMode) {
                 setNormalShooting(!isNormalShooting);
-                if (isNormalShooting) {shipController.getShip().setShooting(new NormalShooting());}
-                else shipController.getShip().setShooting(new MultipleShooting());
+                if (isNormalShooting) {
+                    shipController.getShip().setShooting(new NormalShooting());
+                } else shipController.getShip().setShooting(new MultipleShooting());
             }
         });
     }
 
     @Override
+    public boolean shipBullet(Ship ship) {return ship.equals(shipController.getShip());}
+
+    @Override
     public void bulletEntity(double damage, Asteroid asteroid) {
         score += damage;
-        if(asteroid.shouldBeRemoved()) score += damage;
+        if (asteroid.shouldBeRemoved()) score += damage;
         shipController.getShipView().updatePoints(score);
     }
 
     @Override
     public void bulletEntity(double damage, Ship ship) {
         score += damage / 10;
-        if(ship.shouldBeRemoved()) score += damage / 10;
+        if (ship.shouldBeRemoved()) score += damage / 10;
         shipController.getShipView().updatePoints(score);
     }
 
-    @Override
-    public boolean shipBullet(Ship ship) {return ship.equals(shipController.getShip());}
 
     public boolean isDead() {return shipController.getShip().getHealth() <= 0 && lives <= 0;}
 
