@@ -3,7 +3,6 @@ package UI;
 import edu.austral.dissis.starships.file.ImageLoader;
 import edu.austral.dissis.starships.game.RootSetter;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -31,8 +30,10 @@ public class ChooseShipUI {
         Text title1 = createTitle(i + 1);
         ship1 = createShipSelector(150,   "starship.png" );
         ship2 = createShipSelector(350, "starships3.png");
-        ship1.setOnMouseClicked(e -> {ConfigurationReader.setShip(i, "starship.png");});
-        ship2.setOnMouseClicked(e -> {ConfigurationReader.setShip(i, "starships3.png");});
+        ship1.setOnMouseClicked(e -> {
+            ConfigurationReader.setShip(i, "starship.png");});
+        ship2.setOnMouseClicked(e -> {
+            ConfigurationReader.setShip(i, "starships3.png");});
 
         pane.getChildren().addAll(backgroundView, title1, next, back, ship1, ship2);
     }
